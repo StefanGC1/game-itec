@@ -18,6 +18,10 @@ config/icon="res://icon.svg"
 
 project/assembly_name="game-itec"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/TileMapLayer3D/plugin.cfg")
+
 [input]
 
 2d_left={
