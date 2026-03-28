@@ -64,12 +64,19 @@ func get_inventory_capacity() -> int:
 
 
 func get_upgrade_state() -> Dictionary:
+	var inflation_multiplier := _get_upgrade_inflation_multiplier()
 	return {
 		"credits": credits,
+		"upgrade_inflation_multiplier": inflation_multiplier,
+		"upgrade_inflation_percent": int(round((inflation_multiplier - 1.0) * 100.0)),
 		"drill_level": drill_level,
+		"next_drill_cost": _get_next_upgrade_cost("drill"),
 		"mining_speed_level": mining_speed_level,
+		"next_mining_speed_cost": _get_next_upgrade_cost("mining_speed"),
 		"fuel_capacity_level": fuel_capacity_level,
+		"next_fuel_capacity_cost": _get_next_upgrade_cost("fuel_capacity"),
 		"inventory_capacity_level": inventory_capacity_level,
+		"next_inventory_capacity_cost": _get_next_upgrade_cost("inventory_capacity"),
 		"mining_speed": get_mining_speed(),
 		"fuel_capacity": get_fuel_capacity(),
 		"inventory_capacity": get_inventory_capacity()
@@ -80,7 +87,7 @@ func try_upgrade_drill() -> Dictionary:
 	if drill_level >= DRILL_MAX_LEVEL:
 		return {"success": false, "message": "Drill is already max level."}
 
-	var cost: int = DRILL_UPGRADE_COSTS[drill_level]
+	var cost: int = _apply_upgrade_inflation(int(DRILL_UPGRADE_COSTS[drill_level]))
 	if credits < cost:
 		return {"success": false, "message": "Not enough credits for drill upgrade (" + str(cost) + ")."}
 
@@ -126,10 +133,50 @@ func _try_upgrade_stat(stat_name: String) -> Dictionary:
 	if current_level >= STAT_MAX_LEVEL:
 		return {"success": false, "message": label + " is already max level."}
 
-	var cost: int = int(costs[current_level])
+	var cost: int = _apply_upgrade_inflation(int(costs[current_level]))
 	if credits < cost:
 		return {"success": false, "message": "Not enough credits for " + label + " (" + str(cost) + ")."}
 
 	credits -= cost
 	set(level_ref, current_level + 1)
 	return {"success": true, "message": label + " upgraded to level " + str(current_level + 1) + "."}
+
+
+func _get_upgrade_inflation_multiplier() -> float:
+	if has_node("/root/GameState"):
+		var game_state := get_node("/root/GameState")
+		if game_state.has_method("get_upgrade_inflation_multiplier"):
+			return float(game_state.call("get_upgrade_inflation_multiplier"))
+
+	return 1.0
+
+
+func _apply_upgrade_inflation(base_cost: int) -> int:
+	if has_node("/root/GameState"):
+		var game_state := get_node("/root/GameState")
+		if game_state.has_method("apply_inflation_to_upgrade_cost"):
+			return int(game_state.call("apply_inflation_to_upgrade_cost", base_cost))
+
+	return max(1, int(round(float(base_cost) * _get_upgrade_inflation_multiplier())))
+
+
+func _get_next_upgrade_cost(upgrade_type: String) -> int:
+	match upgrade_type:
+		"drill":
+			if drill_level >= DRILL_MAX_LEVEL:
+				return -1
+			return _apply_upgrade_inflation(int(DRILL_UPGRADE_COSTS[drill_level]))
+		"mining_speed":
+			if mining_speed_level >= STAT_MAX_LEVEL:
+				return -1
+			return _apply_upgrade_inflation(int(MINING_SPEED_UPGRADE_COSTS[mining_speed_level]))
+		"fuel_capacity":
+			if fuel_capacity_level >= STAT_MAX_LEVEL:
+				return -1
+			return _apply_upgrade_inflation(int(FUEL_UPGRADE_COSTS[fuel_capacity_level]))
+		"inventory_capacity":
+			if inventory_capacity_level >= STAT_MAX_LEVEL:
+				return -1
+			return _apply_upgrade_inflation(int(INVENTORY_UPGRADE_COSTS[inventory_capacity_level]))
+		_:
+			return -1

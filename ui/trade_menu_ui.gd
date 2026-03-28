@@ -111,7 +111,8 @@ func _refresh_selected_item_details() -> void:
 	var buy_price := int(current_snapshot.get(buy_key, 0))
 	var sell_price := int(current_snapshot.get(sell_key, 0))
 	var owned := int(current_snapshot.get(item_id, 0))
-	prices_label.text = _pretty_item_name(item_id) + " | In inventory: " + str(owned) + " | Buy: " + str(buy_price) + " | Sell: " + str(sell_price)
+	var inflation_percent := int(round(float(current_snapshot.get("inflation_index", 0.0)) * 100.0))
+	prices_label.text = _pretty_item_name(item_id) + " | In inventory: " + str(owned) + " | Buy: " + str(buy_price) + " | Sell: " + str(sell_price) + " | Inflation: +" + str(inflation_percent) + "%"
 
 
 func _get_selected_item_id() -> String:

@@ -4,12 +4,24 @@ const HOME_VILLAGE_ID := "HomeVillage"
 const TRADE_ITEMS: Array[String] = ["wood", "herbs", "coal", "iron", "gold", "diamond", "adamantite"]
 const MINEABLE_ORES: Array[String] = ["coal", "iron", "gold", "diamond", "adamantite"]
 
+const PRICE_MIN_MULTIPLIER := 0.55
+const PRICE_MAX_MULTIPLIER := 2.20
+const SELL_PRESSURE_PER_UNIT := 0.045
+const BUY_PRESSURE_PER_UNIT := 0.032
+const STREAK_PRESSURE_PER_UNIT := 0.018
+const PASSIVE_DECAY_PER_TRADE := 0.975
+const OTHER_ITEM_DECAY_PER_TRADE := 0.94
+const RECENT_SELL_HISTORY_LIMIT := 24
+const MAX_GLOBAL_INFLATION := 0.75
+const UPGRADE_INFLATION_WEIGHT := 0.90
+
 signal inventory_changed(item_id: String, new_amount: int)
 signal credits_changed(new_credits: int)
 signal trade_completed(village_id: String, item_id: String, quantity: int, is_buy: bool, credits_delta: int)
 
 var location := "village"
 var credits := 300
+var global_inflation_index := 0.0
 
 var inventory := {
 	"wood": 20,
@@ -104,6 +116,13 @@ var village_prices := {
 	}
 }
 
+var market_pressure: Dictionary = {}
+var recent_sell_history: Array[String] = []
+
+
+func _ready() -> void:
+	_ensure_market_state_initialized()
+
 
 func set_location(new_location: String) -> void:
 	location = new_location
@@ -111,6 +130,21 @@ func set_location(new_location: String) -> void:
 
 func get_inventory_amount(item_id: String) -> int:
 	return int(inventory.get(item_id, 0))
+
+
+func get_global_inflation_index() -> float:
+	return global_inflation_index
+
+
+func get_upgrade_inflation_multiplier() -> float:
+	return 1.0 + (global_inflation_index * UPGRADE_INFLATION_WEIGHT)
+
+
+func apply_inflation_to_upgrade_cost(base_cost: int) -> int:
+	if base_cost <= 0:
+		return 0
+
+	return max(1, int(round(float(base_cost) * get_upgrade_inflation_multiplier())))
 
 
 func add_inventory_item(item_id: String, quantity: int) -> Dictionary:
@@ -152,9 +186,10 @@ func add_mined_ore(ore_id: String, quantity: int) -> Dictionary:
 
 
 func get_prices(village_id: String) -> Dictionary:
+	_ensure_market_state_initialized()
 	if village_prices.has(village_id):
-		return village_prices[village_id]
-	return {
+		return _get_effective_prices(village_prices[village_id])
+	return _get_effective_prices({
 		"wood_buy": 16,
 		"wood_sell": 12,
 		"herbs_buy": 9,
@@ -169,21 +204,23 @@ func get_prices(village_id: String) -> Dictionary:
 		"diamond_sell": 100,
 		"adamantite_buy": 230,
 		"adamantite_sell": 168
-	}
+	})
 
 
 func get_trade_snapshot(village_id: String) -> Dictionary:
-	var prices := get_prices(village_id)
-	var snapshot := {
+	var prices: Dictionary = get_prices(village_id)
+	var snapshot: Dictionary = {
 		"credits": credits,
+		"inflation_index": global_inflation_index,
+		"inflation_multiplier": 1.0 + global_inflation_index,
 		"trade_items": TRADE_ITEMS.duplicate(),
 		"inventory": {},
 		"prices": {}
 	}
 
 	for item_id in TRADE_ITEMS:
-		var buy_key := item_id + "_buy"
-		var sell_key := item_id + "_sell"
+		var buy_key: String = item_id + "_buy"
+		var sell_key: String = item_id + "_sell"
 		snapshot[item_id] = get_inventory_amount(item_id)
 		snapshot[buy_key] = int(prices.get(buy_key, 0))
 		snapshot[sell_key] = int(prices.get(sell_key, 0))
@@ -200,13 +237,13 @@ func buy_item(village_id: String, item_id: String, quantity: int) -> Dictionary:
 	if quantity <= 0:
 		return {"success": false, "message": "Quantity must be greater than zero."}
 
-	var prices := get_prices(village_id)
-	var key := item_id + "_buy"
+	var prices: Dictionary = get_prices(village_id)
+	var key: String = item_id + "_buy"
 	if not prices.has(key):
 		return {"success": false, "message": "This village does not sell " + item_id + "."}
 
-	var price := int(prices[key])
-	var total_cost := price * quantity
+	var price: int = int(prices[key])
+	var total_cost: int = price * quantity
 	if credits < total_cost:
 		return {"success": false, "message": "Not enough credits. Need " + str(total_cost) + "."}
 
@@ -214,6 +251,7 @@ func buy_item(village_id: String, item_id: String, quantity: int) -> Dictionary:
 	credits_changed.emit(credits)
 	inventory[item_id] = get_inventory_amount(item_id) + quantity
 	inventory_changed.emit(item_id, int(inventory[item_id]))
+	_register_trade_pressure(item_id, quantity, true)
 	trade_completed.emit(village_id, item_id, quantity, true, -total_cost)
 	return {
 		"success": true,
@@ -225,21 +263,22 @@ func sell_item(village_id: String, item_id: String, quantity: int) -> Dictionary
 	if quantity <= 0:
 		return {"success": false, "message": "Quantity must be greater than zero."}
 
-	var current_amount := get_inventory_amount(item_id)
+	var current_amount: int = get_inventory_amount(item_id)
 	if current_amount < quantity:
 		return {"success": false, "message": "Not enough " + item_id + " in inventory."}
 
-	var prices := get_prices(village_id)
-	var key := item_id + "_sell"
+	var prices: Dictionary = get_prices(village_id)
+	var key: String = item_id + "_sell"
 	if not prices.has(key):
 		return {"success": false, "message": "This village does not buy " + item_id + "."}
 
-	var price := int(prices[key])
-	var total_revenue := price * quantity
+	var price: int = int(prices[key])
+	var total_revenue: int = price * quantity
 	inventory[item_id] = current_amount - quantity
 	credits += total_revenue
 	credits_changed.emit(credits)
 	inventory_changed.emit(item_id, int(inventory[item_id]))
+	_register_trade_pressure(item_id, quantity, false)
 	trade_completed.emit(village_id, item_id, quantity, false, total_revenue)
 	return {
 		"success": true,
@@ -270,3 +309,104 @@ func gather_from_forest(area_name: String) -> Dictionary:
 		"success": true,
 		"message": "Gathered " + str(wood_gain) + " wood and " + str(herbs_gain) + " herbs at " + area_name + "."
 	}
+
+
+func _ensure_market_state_initialized() -> void:
+	if not market_pressure.is_empty():
+		return
+
+	for item_id in TRADE_ITEMS:
+		market_pressure[item_id] = {
+			"sell": 0.0,
+			"buy": 0.0,
+			"streak": 0.0
+		}
+
+
+func _register_trade_pressure(item_id: String, quantity: int, is_buy: bool) -> void:
+	_ensure_market_state_initialized()
+	if quantity <= 0:
+		return
+
+	for key in market_pressure.keys():
+		var p: Dictionary = market_pressure[key] as Dictionary
+		p["sell"] = float(p.get("sell", 0.0)) * PASSIVE_DECAY_PER_TRADE
+		p["buy"] = float(p.get("buy", 0.0)) * PASSIVE_DECAY_PER_TRADE
+		p["streak"] = float(p.get("streak", 0.0)) * PASSIVE_DECAY_PER_TRADE
+		if str(key) != item_id:
+			p["sell"] = float(p["sell"]) * OTHER_ITEM_DECAY_PER_TRADE
+			p["buy"] = float(p["buy"]) * OTHER_ITEM_DECAY_PER_TRADE
+			p["streak"] = float(p["streak"]) * OTHER_ITEM_DECAY_PER_TRADE
+		market_pressure[key] = p
+
+	var item_pressure: Dictionary = market_pressure.get(item_id, {"sell": 0.0, "buy": 0.0, "streak": 0.0}) as Dictionary
+	if is_buy:
+		item_pressure["buy"] = float(item_pressure.get("buy", 0.0)) + (float(quantity) * BUY_PRESSURE_PER_UNIT)
+	else:
+		item_pressure["sell"] = float(item_pressure.get("sell", 0.0)) + (float(quantity) * SELL_PRESSURE_PER_UNIT)
+		item_pressure["streak"] = float(item_pressure.get("streak", 0.0)) + (float(quantity) * STREAK_PRESSURE_PER_UNIT)
+		recent_sell_history.append(item_id)
+		while recent_sell_history.size() > RECENT_SELL_HISTORY_LIMIT:
+			recent_sell_history.pop_front()
+
+	market_pressure[item_id] = item_pressure
+	_recalculate_global_inflation()
+
+
+func _recalculate_global_inflation() -> void:
+	var total_sell := 0.0
+	var total_buy := 0.0
+	var total_streak := 0.0
+	for item_id in TRADE_ITEMS:
+		var p := market_pressure.get(item_id, {}) as Dictionary
+		total_sell += float(p.get("sell", 0.0))
+		total_buy += float(p.get("buy", 0.0))
+		total_streak += float(p.get("streak", 0.0))
+
+	var item_count: float = max(1.0, float(TRADE_ITEMS.size()))
+	var base_pressure_component: float = ((total_sell * 0.80) + (total_buy * 0.35) + (total_streak * 1.15)) / item_count
+	var concentration_component: float = _get_sell_concentration_index() * 0.85
+	global_inflation_index = clamp((base_pressure_component * 0.07) + concentration_component, 0.0, MAX_GLOBAL_INFLATION)
+
+
+func _get_sell_concentration_index() -> float:
+	if recent_sell_history.is_empty():
+		return 0.0
+
+	var frequency: Dictionary = {}
+	for item_id in recent_sell_history:
+		frequency[item_id] = int(frequency.get(item_id, 0)) + 1
+
+	var highest_count := 0
+	for count in frequency.values():
+		highest_count = max(highest_count, int(count))
+
+	var concentration_ratio: float = float(highest_count) / float(recent_sell_history.size())
+	return clamp((concentration_ratio - (1.0 / max(1.0, float(TRADE_ITEMS.size())))) * 1.15, 0.0, 1.0)
+
+
+func _get_effective_prices(base_prices: Dictionary) -> Dictionary:
+	_ensure_market_state_initialized()
+	var effective_prices: Dictionary = base_prices.duplicate(true)
+	var village_inflation_multiplier: float = 1.0 + global_inflation_index
+
+	for item_id in TRADE_ITEMS:
+		var pressure: Dictionary = market_pressure.get(item_id, {"sell": 0.0, "buy": 0.0, "streak": 0.0}) as Dictionary
+		var base_buy_key: String = item_id + "_buy"
+		var base_sell_key: String = item_id + "_sell"
+		if not base_prices.has(base_buy_key) or not base_prices.has(base_sell_key):
+			continue
+
+		var base_buy: float = float(base_prices[base_buy_key])
+		var base_sell: float = float(base_prices[base_sell_key])
+		var buy_pressure: float = float(pressure.get("buy", 0.0))
+		var sell_pressure: float = float(pressure.get("sell", 0.0))
+		var streak_pressure: float = float(pressure.get("streak", 0.0))
+
+		var buy_multiplier: float = clamp((1.0 + buy_pressure * 0.08) * village_inflation_multiplier, 1.0, PRICE_MAX_MULTIPLIER)
+		var sell_penalty_multiplier: float = clamp(1.0 - (sell_pressure * 0.09) - (streak_pressure * 0.08), PRICE_MIN_MULTIPLIER, 1.0)
+
+		effective_prices[base_buy_key] = max(1, int(round(base_buy * buy_multiplier)))
+		effective_prices[base_sell_key] = max(1, int(round(base_sell * sell_penalty_multiplier)))
+
+	return effective_prices

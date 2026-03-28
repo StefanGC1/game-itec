@@ -51,13 +51,20 @@ func close_ui() -> void:
 
 func set_shop_state(state: Dictionary, status: String, can_interact: bool) -> void:
 	credits_value.text = "Credits: " + str(state.get("credits", 0))
-	drill_value.text = "Drill Level: " + str(state.get("drill_level", 1)) + " / 3"
-	mining_speed_value.text = "Mining Speed Level: " + str(state.get("mining_speed_level", 1)) + " / 10"
-	fuel_capacity_value.text = "Fuel Capacity Level: " + str(state.get("fuel_capacity_level", 1)) + " / 10"
-	inventory_capacity_value.text = "Inventory Capacity Level: " + str(state.get("inventory_capacity_level", 1)) + " / 10"
-	status_value.text = "Status: " + status
+	drill_value.text = "Drill Level: " + str(state.get("drill_level", 1)) + " / 3 | Next cost: " + _format_next_cost(state.get("next_drill_cost", -1))
+	mining_speed_value.text = "Mining Speed Level: " + str(state.get("mining_speed_level", 1)) + " / 10 | Next cost: " + _format_next_cost(state.get("next_mining_speed_cost", -1))
+	fuel_capacity_value.text = "Fuel Capacity Level: " + str(state.get("fuel_capacity_level", 1)) + " / 10 | Next cost: " + _format_next_cost(state.get("next_fuel_capacity_cost", -1))
+	inventory_capacity_value.text = "Inventory Capacity Level: " + str(state.get("inventory_capacity_level", 1)) + " / 10 | Next cost: " + _format_next_cost(state.get("next_inventory_capacity_cost", -1))
+	status_value.text = "Status: " + status + " | Inflation: +" + str(int(state.get("upgrade_inflation_percent", 0))) + "%"
 
 	drill_button.disabled = not can_interact
 	mining_button.disabled = not can_interact
 	fuel_button.disabled = not can_interact
 	inventory_button.disabled = not can_interact
+
+
+func _format_next_cost(cost_value: Variant) -> String:
+	var cost := int(cost_value)
+	if cost < 0:
+		return "MAX"
+	return str(cost)
