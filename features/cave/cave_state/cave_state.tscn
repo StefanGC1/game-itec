@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ctoxmv3mqffc1"]
+
+[ext_resource type="Script" uid="uid://t3kp3ojp4ogs" path="res://features/cave/cave_state/cave_state.gd" id="1_akwrg"]
+
+[node name="CaveState" type="Node" unique_id=1202534183]
+script = ExtResource("1_akwrg")

@@ -7,8 +7,8 @@ const CaveRockEntryResource := preload("res://features/cave/cave_generator/cave_
 @export var tile_set: TileSet
 
 @export_group("Tile Coordinates")
-@export var rock_entries: Array[Resource] = []
-@export var ore_entries: Array[Resource] = []
+@export var rock_entries: Array[CaveRockEntry] = []
+@export var ore_entries: Array[CaveOreEntry] = []
 @export var tier_gate_tile: Vector2i = Vector2i(0, 3)
 @export var empty_tile: Vector2i = Vector2i(4, 0)
 @export var atlas_source_id: int = 0
@@ -118,6 +118,7 @@ func _create_layers() -> Array[TileMapLayer]:
 
 		parent_node.add_child(layer)
 		layer.owner = parent_node.owner
+		# layer.z_index = i - zlayer_amount - 1
 		result.append(layer)
 
 	return result

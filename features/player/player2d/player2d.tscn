@@ -5,7 +5,7 @@
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hxpdd"]
 radius = 15.0
-height = 64.0
+height = 60.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hxpdd"]
 atlas = ExtResource("2_hxpdd")
@@ -128,6 +128,7 @@ animations = [{
 script = ExtResource("1_sacy7")
 
 [node name="EnvCollision" type="CollisionShape2D" parent="." unique_id=2066574137]
+position = Vector2(0, 1)
 shape = SubResource("CapsuleShape2D_hxpdd")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=278199187]
@@ -138,6 +139,8 @@ animation = &"idle"
 zoom = Vector2(1.75, 1.75)
 limit_left = 0
 limit_top = 0
+limit_right = 4800
+limit_bottom = 9600
 limit_smoothed = true
 
 [node name="FootPosition" type="Marker2D" parent="." unique_id=880649287]
