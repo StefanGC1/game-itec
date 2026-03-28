@@ -48,7 +48,7 @@ func _ready() -> void:
 		print("DEBUG POSITION: ", tile_map_layers[i].position)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 # ================ LAYER PREVIEW ==================
@@ -143,7 +143,7 @@ func _finish_switch_next_physics(direction: int, player_position: Vector2) -> vo
 	print("Switched to layer name: ", tile_map_layers[current_layer].name)
 
 func is_valid_switch(direction: int, player_position: Vector2) -> bool:
-	var current_layer_node: TileMapLayer = tile_map_layers[current_layer] as TileMapLayer
+	var _current_layer_node: TileMapLayer = tile_map_layers[current_layer] as TileMapLayer
 	var target_layer_node: TileMapLayer = tile_map_layers[current_layer + direction] as TileMapLayer
 
 	# Check if switch would cause player to land in an invalid position (inside a solid tile)

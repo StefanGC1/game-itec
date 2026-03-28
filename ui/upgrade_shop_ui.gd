@@ -7,6 +7,8 @@ signal fuel_capacity_upgrade_requested
 signal inventory_capacity_upgrade_requested
 signal close_requested
 
+@onready var backdrop: ColorRect = $Backdrop
+@onready var root_margin: MarginContainer = $MarginContainer
 @onready var panel: PanelContainer = $MarginContainer/PanelContainer
 @onready var credits_value: Label = $MarginContainer/PanelContainer/MarginContainer/VBoxContainer/CreditsValue
 @onready var drill_value: Label = $MarginContainer/PanelContainer/MarginContainer/VBoxContainer/DrillValue
@@ -24,11 +26,27 @@ signal close_requested
 
 func _ready() -> void:
 	visible = false
+	backdrop.modulate.a = 0.0
+	root_margin.modulate.a = 0.0
 	drill_button.pressed.connect(func() -> void: drill_upgrade_requested.emit())
 	mining_button.pressed.connect(func() -> void: mining_speed_upgrade_requested.emit())
 	fuel_button.pressed.connect(func() -> void: fuel_capacity_upgrade_requested.emit())
 	inventory_button.pressed.connect(func() -> void: inventory_capacity_upgrade_requested.emit())
 	close_button.pressed.connect(func() -> void: close_requested.emit())
+
+
+func open_ui() -> void:
+	visible = true
+	var tween := create_tween()
+	tween.parallel().tween_property(backdrop, "modulate:a", 1.0, 0.14)
+	tween.parallel().tween_property(root_margin, "modulate:a", 1.0, 0.14)
+
+
+func close_ui() -> void:
+	var tween := create_tween()
+	tween.parallel().tween_property(backdrop, "modulate:a", 0.0, 0.12)
+	tween.parallel().tween_property(root_margin, "modulate:a", 0.0, 0.12)
+	tween.finished.connect(func() -> void: visible = false)
 
 
 func set_shop_state(state: Dictionary, status: String, can_interact: bool) -> void:
