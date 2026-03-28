@@ -23,7 +23,7 @@ bg_color = Color(1, 1, 1, 1)
 bg_color = Color(0.79618526, 0.4054474, 0.18034497, 1)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rog4w"]
-radius = 246.4792
+radius = 278.3038
 
 [node name="Candyman" type="CharacterBody2D" unique_id=1431360417]
 collision_layer = 17
