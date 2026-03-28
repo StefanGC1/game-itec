@@ -9,6 +9,9 @@ var ZERO_OPACITY: float = 0.0
 var FULL_OPACITY: float = 255.0
 
 # Array for all TileMapLayer nodes in the level
+@export_group("Automatic generation")
+@export var cave_generator: CaveGenerator = null
+@export_group("Manual layer management")
 @export var tile_map_layers: Array[TileMapLayer] = []
 @export var starting_layer: int = 0
 var current_layer: int = 0
@@ -36,6 +39,10 @@ func _ready() -> void:
 	if starting_layer < 0 or starting_layer >= tile_map_layers.size():
 		printerr("Starting layer index is out of bounds: ", starting_layer)
 		current_layer = clamp(starting_layer, 0, tile_map_layers.size() - 1)
+	
+	if cave_generator:
+		tile_map_layers = cave_generator.get_generated_layers()
+		current_layer = 0
 
 	print("Current active layer: ", current_layer)
 	print("Current active layer name: ", tile_map_layers[current_layer].name)

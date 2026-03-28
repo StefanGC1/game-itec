@@ -1,9 +1,13 @@
 [gd_scene format=4 uid="uid://ds1kj1455yh0n"]
 
+[ext_resource type="Script" uid="uid://cy8ia3un7je3e" path="res://levels/TestLevel_CaveGeneration/test_cave_gen_level.gd" id="1_1ha1f"]
 [ext_resource type="TileSet" uid="uid://bih3btekqwv8b" path="res://shared/test_gen_tileset/test_gen_tileset.tres" id="1_uluoq"]
 [ext_resource type="PackedScene" uid="uid://ci6n83k74ykvr" path="res://features/player/player2d/player2d.tscn" id="2_bl1fb"]
+[ext_resource type="PackedScene" uid="uid://bpmj14aficryf" path="res://features/z_layer_manager/z_layer_manager.tscn" id="3_h7rhv"]
+[ext_resource type="PackedScene" uid="uid://ba1o6kpqmg2kn" path="res://features/cave/cave_generator/cave_generator.tscn" id="4_1ha1f"]
 
 [node name="TestCaveGenLevel" type="Node2D" unique_id=1057932808]
+script = ExtResource("1_1ha1f")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=2133349541]
 tile_map_data = PackedByteArray("AAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAABAAIAAAAAAAAAAAABAAMAAAAAAAAAAAABAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAAEAAIAAAAAAAAAAAAEAAMAAAAAAAAAAAAEAAQAAAAAAAAAAAAEAAUAAAAAAAAAAAAEAAYAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAcAAAAAAAAAAAABAAUAAAAAAAAAAAABAAYAAAAAAAAAAAABAAcAAAAAAAAAAAAFAAAAAAAAAAAAAAAFAAEAAAAAAAAAAAAFAAIAAAAAAAAAAAAFAAMAAAAAAAAAAAAFAAQAAAAAAAAAAAAFAAUAAAAAAAAAAAAFAAYAAAAAAAAAAAAFAAcAAAAAAAAAAAAEAAcAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAAsAAAAAAAAAAAABAAsAAAAAAAAAAAABAAoAAAAAAAAAAAACAAoAAAAAAAAAAAACAAsAAAAAAAAAAAADAAsAAAAAAAAAAAADAAoAAAAAAAAAAAAEAAoAAAAAAAAAAAAEAAsAAAAAAAAAAAAFAAsAAAAAAAAAAAAFAAoAAAAAAAAAAAA=")
@@ -11,3 +15,9 @@ tile_set = ExtResource("1_uluoq")
 
 [node name="Player2D" parent="." unique_id=204201863 instance=ExtResource("2_bl1fb")]
 position = Vector2(181, 139)
+
+[node name="ZLayerManager" parent="." unique_id=1182993615 node_paths=PackedStringArray("tile_map_layers") instance=ExtResource("3_h7rhv")]
+tile_map_layers = [NodePath("../TileMapLayer")]
+
+[node name="CaveGenerator" parent="." unique_id=1078709370 instance=ExtResource("4_1ha1f")]
+tile_set = ExtResource("1_uluoq")
