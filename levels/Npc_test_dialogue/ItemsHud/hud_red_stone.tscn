@@ -5,10 +5,10 @@
 [node name="Hud_red_stone" type="CanvasLayer" unique_id=1358409390]
 
 [node name="GridContainer" type="GridContainer" parent="." unique_id=1975477694]
-offset_left = 29.0
-offset_top = 212.0
-offset_right = 210.0
-offset_bottom = 308.0
+offset_left = 36.0
+offset_top = 317.0
+offset_right = 217.0
+offset_bottom = 413.0
 
 [node name="Sprite2D" type="Sprite2D" parent="GridContainer" unique_id=550352892]
 position = Vector2(58, 0)

@@ -7,6 +7,8 @@
 [ext_resource type="AudioStream" uid="uid://ct5cfh1nvwefj" path="res://levels/Npc_test_dialogue/Sounds/Landinig_brick_sound.mp3" id="5_t8xyc"]
 [ext_resource type="AudioStream" uid="uid://bhd8o8kh64mba" path="res://levels/Npc_test_dialogue/Sounds/Landing_grass_sound.mp3" id="6_xrs7n"]
 [ext_resource type="PackedScene" uid="uid://ctxhod1yudc8i" path="res://levels/Npc_test_dialogue/ItemsHud/coin_hud.tscn" id="7_rog4w"]
+[ext_resource type="PackedScene" uid="uid://c6qtmytc18d4f" path="res://levels/Npc_test_dialogue/ItemsHud/hud_red_stone.tscn" id="8_t8xyc"]
+[ext_resource type="PackedScene" uid="uid://1e1qjyxlui5m" path="res://levels/Npc_test_dialogue/Hud_fuel/fuel_hiud.tscn" id="9_xrs7n"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dbcjw"]
 radius = 167.02695
@@ -76,3 +78,9 @@ show_percentage = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Mining_detector" unique_id=938682887]
 position = Vector2(-18, -60)
 shape = SubResource("CircleShape2D_rog4w")
+
+[node name="Hud_red_stone" parent="." unique_id=1358409390 instance=ExtResource("8_t8xyc")]
+
+[node name="Fuel_hiud" parent="." unique_id=630176153 instance=ExtResource("9_xrs7n")]
+
+[connection signal="area_entered" from="DialogueFinder" to="." method="_on_dialogue_finder_area_entered"]

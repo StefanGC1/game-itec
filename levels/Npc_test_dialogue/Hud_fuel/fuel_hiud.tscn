@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://1e1qjyxlui5m"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uh4j8"]
+bg_color = Color(0.029464848, 0.0058134524, 0.005392626, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rcns1"]
+bg_color = Color(0.6000405, 0.30532783, 0.16192001, 1)
+
+[node name="Fuel_hiud" type="CanvasLayer" unique_id=630176153]
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=332947398]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -212.5
+offset_right = 212.5
+offset_bottom = 31.0
+grow_horizontal = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_uh4j8")
+theme_override_styles/fill = SubResource("StyleBoxFlat_rcns1")
+value = 100.0
