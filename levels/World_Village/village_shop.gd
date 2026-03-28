@@ -2,6 +2,7 @@ extends Node3D
 
 const SHOP_TOGGLE_ACTION := "shop_toggle"
 const SHOP_UI_SCENE := preload("res://ui/upgrade_shop_ui.tscn")
+const INVENTORY_UI_SCENE := preload("res://ui/inventory_overlay.tscn")
 const WORLD_MAP_SCENE := "res://levels/World_Map/World_Map.tscn"
 const MAP_ENTRANCE_FALLBACK_RADIUS := 2.4
 
@@ -11,6 +12,7 @@ const MAP_ENTRANCE_FALLBACK_RADIUS := 2.4
 var map_entrance: Area3D
 
 var shop_ui: CanvasLayer
+var inventory_ui: CanvasLayer
 var player_in_shop := false
 var status_message := "Walk into the shop area to upgrade."
 var shop_open := false
@@ -24,6 +26,8 @@ func _ready() -> void:
 
 	shop_ui = SHOP_UI_SCENE.instantiate() as CanvasLayer
 	add_child(shop_ui)
+	inventory_ui = INVENTORY_UI_SCENE.instantiate() as CanvasLayer
+	add_child(inventory_ui)
 	shop_ui.connect("drill_upgrade_requested", _on_drill_upgrade_requested)
 	shop_ui.connect("mining_speed_upgrade_requested", _on_mining_speed_upgrade_requested)
 	shop_ui.connect("fuel_capacity_upgrade_requested", _on_fuel_upgrade_requested)

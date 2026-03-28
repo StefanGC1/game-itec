@@ -3,6 +3,7 @@ extends Node2D
 const HOME_VILLAGE_NAME := "HomeVillage"
 const WORLD_VILLAGE_SCENE := "res://levels/World_Village/Village.tscn"
 const TRADE_MENU_UI_SCENE := preload("res://ui/trade_menu_ui.tscn")
+const INVENTORY_UI_SCENE := preload("res://ui/inventory_overlay.tscn")
 
 @onready var home_village_button: Button = $HomeVillage
 @onready var village_buttons: Array[Button] = [
@@ -18,12 +19,15 @@ const TRADE_MENU_UI_SCENE := preload("res://ui/trade_menu_ui.tscn")
 ]
 
 var trade_menu: CanvasLayer
+var inventory_ui: CanvasLayer
 var status_label: Label
 
 
 func _ready() -> void:
 	trade_menu = TRADE_MENU_UI_SCENE.instantiate() as CanvasLayer
 	add_child(trade_menu)
+	inventory_ui = INVENTORY_UI_SCENE.instantiate() as CanvasLayer
+	add_child(inventory_ui)
 	trade_menu.buy_requested.connect(_on_trade_buy_requested)
 	trade_menu.sell_requested.connect(_on_trade_sell_requested)
 	trade_menu.close_requested.connect(_on_trade_close_requested)
