@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+
 const FLOOR_EPSILON := 0.01
 
 enum PlayerState {
@@ -14,7 +16,7 @@ enum PlayerState {
 @onready var foot_pos_marker = $FootPosition
 
 @export_group("Movement")
-@export var max_speed: float = 220.0
+@export var max_speed: float = 320.0
 @export var ground_accel: float = 1600.0
 @export var ground_decel: float = 2200.0
 @export var air_accel: float = 900.0
@@ -43,6 +45,7 @@ var coyote_window_active: bool = false
 var jump_buffer_active: bool = false
 var landing_lock_active: bool = false
 var was_on_floor: bool = false
+var facing_direction: int = 1
 
 signal switch_layer(direction: int, player_position: Vector2)
 signal preview_layers(isActive: bool)
@@ -53,6 +56,8 @@ func _ready() -> void:
 	jump_buffer_timer = _create_one_shot_timer(jump_buffer_time, _on_jump_buffer_timer_timeout)
 	landing_timer = _create_one_shot_timer(landing_state_duration, _on_landing_timer_timeout)
 	was_on_floor = is_on_floor()
+
+	animated_sprite.play("idle")
 
 
 func _create_one_shot_timer(wait_time: float, on_timeout: Callable) -> Timer:
@@ -67,6 +72,7 @@ func _physics_process(delta: float) -> void:
 	var on_floor_before := is_on_floor()
 	var direction := Input.get_axis("2d_left", "2d_right")
 	var mining_active := _is_mining_input_active()
+	_update_facing_from_direction_input(direction)
 
 	_capture_jump_buffer_input()
 	_apply_jump_cut()
@@ -86,6 +92,7 @@ func _physics_process(delta: float) -> void:
 	var on_floor_after := is_on_floor()
 	_update_coyote_window(was_on_floor, on_floor_after)
 	_update_state_after_move(direction)
+	_update_animation(mining_active)
 	was_on_floor = on_floor_after
 
 
@@ -192,6 +199,81 @@ func _set_state(new_state: PlayerState) -> void:
 	if current_state == new_state:
 		return
 	current_state = new_state
+
+
+func _update_facing_from_direction_input(direction: float) -> void:
+	if direction > FLOOR_EPSILON:
+		facing_direction = 1
+	elif direction < -FLOOR_EPSILON:
+		facing_direction = -1
+
+
+func _update_animation(mining_active: bool) -> void:
+	if mining_active:
+		_play_mining_animation_from_mouse_angle()
+		return
+
+	animated_sprite.flip_h = facing_direction < 0
+
+	if not is_on_floor():
+		_play_animation_if_needed("jump")
+		return
+
+	if current_state == PlayerState.RUN and abs(velocity.x) > FLOOR_EPSILON:
+		_play_animation_if_needed("run")
+	else:
+		_play_animation_if_needed("idle")
+
+
+func _play_mining_animation_from_mouse_angle() -> void:
+	var mouse_delta := get_global_mouse_position() - global_position
+	var angle := rad_to_deg(mouse_delta.angle())
+	# This return relative to horizontal right
+	# Subtract 90 to make it relative to vertical up
+	angle += 90.0
+	if angle < 0.0:
+		angle += 360.0
+	
+	print("Mouse angle: ", angle)
+
+	# Right-facing sectors
+	if angle >= 0.0 and angle < 45.0:
+		animated_sprite.flip_h = false
+		_play_animation_if_needed("drill_up")
+		facing_direction = 1
+		return
+	if angle >= 45.0 and angle < 135.0:
+		animated_sprite.flip_h = false
+		_play_animation_if_needed("drill_forward")
+		facing_direction = 1
+		return
+	if angle >= 135.0 and angle < 180.0:
+		animated_sprite.flip_h = false
+		_play_animation_if_needed("drill_down")
+		facing_direction = 1
+		return
+
+	# Left-facing mirrored sectors
+	if angle >= 315.0 and angle < 360.0:
+		animated_sprite.flip_h = true
+		_play_animation_if_needed("drill_up")
+		facing_direction = -1
+		return
+	if angle >= 225.0 and angle < 315.0:
+		animated_sprite.flip_h = true
+		_play_animation_if_needed("drill_forward")
+		facing_direction = -1
+		return
+
+	# 180..225 (including 180 exactly)
+	animated_sprite.flip_h = true
+	_play_animation_if_needed("drill_down")
+	facing_direction = -1
+
+
+func _play_animation_if_needed(animation_name: StringName) -> void:
+	if animated_sprite.animation != animation_name:
+		animated_sprite.play(animation_name)
 
 # ================= TIMER TIMEOUT CALLBACKS =================
 

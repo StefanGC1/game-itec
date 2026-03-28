@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bnyph8oktn8w4"]
+
+[ext_resource type="Texture2D" uid="uid://ibuoxi1fp7wx" path="res://assets/Stones/red_stone.png" id="1_0d41o"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p4qwj"]
+size = Vector2(119, 90)
+
+[node name="RedStone" type="Area2D" unique_id=497093771]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=589627062]
+texture = ExtResource("1_0d41o")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=816021578]
+position = Vector2(9.5, -24)
+shape = SubResource("RectangleShape2D_p4qwj")
