@@ -123,19 +123,27 @@ layout_mode = 2
 text = "Credits: 0"
 theme_override_font_sizes/font_size = 18
 
-[node name="WoodValue" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="InventoryValue" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Wood in inventory: 0"
+text = "Inventory:"
 modulate = Color(0.854902, 0.937255, 0.984314, 1)
+autowrap_mode = 3
 
-[node name="HerbsValue" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ItemRow" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Herbs in inventory: 0"
-modulate = Color(0.854902, 0.937255, 0.984314, 1)
+theme_override_constants/separation = 8
+
+[node name="ItemLabel" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemRow"]
+layout_mode = 2
+text = "Resource"
+
+[node name="ItemOptionButton" type="OptionButton" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemRow"]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="PricesValue" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Wood buy/sell: 0 / 0 | Herbs buy/sell: 0 / 0"
+text = "Select a resource to view prices."
 autowrap_mode = 3
 
 [node name="QuantityRow" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
@@ -157,30 +165,16 @@ value = 5.0
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="BuyWoodButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons"]
+[node name="BuyButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons"]
 layout_mode = 2
-text = "Buy Wood"
+text = "Buy Selected"
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 
-[node name="SellWoodButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons"]
+[node name="SellButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons"]
 layout_mode = 2
-text = "Sell Wood"
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
-
-[node name="BuyHerbsButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons"]
-layout_mode = 2
-text = "Buy Herbs"
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
-
-[node name="SellHerbsButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons"]
-layout_mode = 2
-text = "Sell Herbs"
+text = "Sell Selected"
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
