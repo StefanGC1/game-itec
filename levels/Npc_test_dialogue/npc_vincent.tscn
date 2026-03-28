@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://dc1f6ivl2v0tj"]
+
+[ext_resource type="Script" uid="uid://y67cugqnw3b8" path="res://levels/Npc_test_dialogue/npc_vincent.gd" id="1_o4i1s"]
+[ext_resource type="Texture2D" uid="uid://bu1p7163wcqdg" path="res://icon.svg" id="1_w8m5s"]
+[ext_resource type="Resource" uid="uid://y0gejhxljj44" path="res://levels/Npc_test_dialogue/Dialogs/Vincent_dialogue.dialogue" id="2_ykhd4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o4i1s"]
+size = Vector2(185, 151)
+
+[node name="Npc_vincent" type="Area2D" unique_id=1284194164]
+collision_mask = 16
+script = ExtResource("1_o4i1s")
+dialogue_resource = ExtResource("2_ykhd4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1018662660]
+position = Vector2(-1.5, 5.5)
+shape = SubResource("RectangleShape2D_o4i1s")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1035383474]
+position = Vector2(7, 3)
+texture = ExtResource("1_w8m5s")
+
+[node name="Label" type="Label" parent="." unique_id=1395561615]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -185.0
+offset_top = -132.0
+offset_right = 198.0
+offset_bottom = -17.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 32
+text = "Press T to talk to Vincent"
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://y0gejhxljj44"
+path="res://.godot/imported/Vincent_dialogue.dialogue-0731c3be03e41b9800e900b636c38000.tres"
+
+[deps]
+
+source_file="res://levels/Npc_test_dialogue/Dialogs/Vincent_dialogue.dialogue"
+dest_files=["res://.godot/imported/Vincent_dialogue.dialogue-0731c3be03e41b9800e900b636c38000.tres"]
+
+[params]
+
+defaults=true

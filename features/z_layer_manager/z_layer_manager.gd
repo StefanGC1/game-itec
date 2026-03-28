@@ -160,12 +160,6 @@ func is_valid_switch(direction: int, player_position: Vector2) -> bool:
 	print("Target layer at current cell has " + str(collision_count) + " collision polygons")
 	return collision_count == 0
 
-# func reset_layer_offset() -> void:
-# 	# TODO: Reset only for previous and next layer
-# 	for layer in tile_map_layers:
-# 		layer.position = offsets[1] # Reset to default position
-
-
 # ================ DEBUG =================
 
 @export_tool_button("Layer forward", "MoveUp") var layer_frwd_btn: Callable = editor_layer_forward
