@@ -23,6 +23,13 @@ var location := "village"
 var credits := 300
 var global_inflation_index := 0.0
 
+var player_progress: Dictionary = {
+	"drill_level": 1,
+	"mining_speed_level": 1,
+	"fuel_capacity_level": 1,
+	"inventory_capacity_level": 1
+}
+
 var inventory := {
 	"wood": 20,
 	"herbs": 8,
@@ -130,6 +137,42 @@ func set_location(new_location: String) -> void:
 
 func get_inventory_amount(item_id: String) -> int:
 	return int(inventory.get(item_id, 0))
+
+
+func get_player_progress_snapshot() -> Dictionary:
+	var snapshot := player_progress.duplicate(true)
+	snapshot["credits"] = credits
+	return snapshot
+
+
+func capture_player_state(player_node: Node) -> void:
+	if player_node == null:
+		return
+
+	credits = int(player_node.get("credits"))
+	if player_node.get("drill_level") != null:
+		player_progress["drill_level"] = int(player_node.get("drill_level"))
+	if player_node.get("mining_speed_level") != null:
+		player_progress["mining_speed_level"] = int(player_node.get("mining_speed_level"))
+	if player_node.get("fuel_capacity_level") != null:
+		player_progress["fuel_capacity_level"] = int(player_node.get("fuel_capacity_level"))
+	if player_node.get("inventory_capacity_level") != null:
+		player_progress["inventory_capacity_level"] = int(player_node.get("inventory_capacity_level"))
+
+
+func apply_player_state(player_node: Node) -> void:
+	if player_node == null:
+		return
+
+	player_node.set("credits", credits)
+	if player_node.get("drill_level") != null:
+		player_node.set("drill_level", int(player_progress.get("drill_level", 1)))
+	if player_node.get("mining_speed_level") != null:
+		player_node.set("mining_speed_level", int(player_progress.get("mining_speed_level", 1)))
+	if player_node.get("fuel_capacity_level") != null:
+		player_node.set("fuel_capacity_level", int(player_progress.get("fuel_capacity_level", 1)))
+	if player_node.get("inventory_capacity_level") != null:
+		player_node.set("inventory_capacity_level", int(player_progress.get("inventory_capacity_level", 1)))
 
 
 func get_global_inflation_index() -> float:

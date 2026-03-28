@@ -37,7 +37,7 @@ func _ready() -> void:
 		map_entrance.body_entered.connect(_on_map_entrance_body_entered)
 	if shop_label:
 		shop_label.text = "Upgrade Shop\nPress E while inside area"
-	_sync_player_credits_from_game_state()
+	_sync_player_state_from_game_state()
 	_refresh_shop_ui()
 
 
@@ -77,7 +77,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _attempt_upgrade(upgrade_type: String) -> void:
 	status_message = _execute_upgrade(upgrade_type)
-	_sync_game_state_credits_from_player()
+	_sync_game_state_from_player()
 	_refresh_shop_ui()
 
 
@@ -129,7 +129,7 @@ func _execute_upgrade(upgrade_type: String) -> String:
 func _on_shop_area_body_entered(body: Node3D) -> void:
 	if body != player:
 		return
-	_sync_player_credits_from_game_state()
+	_sync_player_state_from_game_state()
 	player_in_shop = true
 	status_message = "Press E to open the shop menu."
 	_refresh_shop_ui()
@@ -176,7 +176,7 @@ func _go_to_world_map() -> void:
 	if shop_open:
 		_close_shop()
 
-	_sync_game_state_credits_from_player()
+	_sync_game_state_from_player()
 
 	if has_node("/root/GameState"):
 		get_node("/root/GameState").call("set_location", "world_map")
@@ -184,17 +184,25 @@ func _go_to_world_map() -> void:
 	get_tree().change_scene_to_file(WORLD_MAP_SCENE)
 
 
-func _sync_player_credits_from_game_state() -> void:
+func _sync_player_state_from_game_state() -> void:
 	if not player or not has_node("/root/GameState"):
 		return
 
 	var game_state := get_node("/root/GameState")
+	if game_state.has_method("apply_player_state"):
+		game_state.call("apply_player_state", player)
+		return
+
 	player.set("credits", int(game_state.get("credits")))
 
 
-func _sync_game_state_credits_from_player() -> void:
+func _sync_game_state_from_player() -> void:
 	if not player or not has_node("/root/GameState"):
 		return
 
 	var game_state := get_node("/root/GameState")
+	if game_state.has_method("capture_player_state"):
+		game_state.call("capture_player_state", player)
+		return
+
 	game_state.set("credits", int(player.get("credits")))
