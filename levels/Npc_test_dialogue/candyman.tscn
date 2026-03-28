@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://0fhvbjov3nyf"]
+
+[ext_resource type="Texture2D" uid="uid://ww6bk400vhdj" path="res://levels/Npc_test_dialogue/Candyman_fara_fundal.png" id="1_4u6mg"]
+[ext_resource type="Script" uid="uid://ckxqn7p0aekd3" path="res://levels/Npc_test_dialogue/candyman.gd" id="1_dbcjw"]
+[ext_resource type="AudioStream" uid="uid://c5kfb4gjajggr" path="res://levels/Npc_test_dialogue/Sounds/Footstep_concrete_insta.mp3" id="3_qfvsd"]
+[ext_resource type="AudioStream" uid="uid://c2ii4koh38rrq" path="res://levels/Npc_test_dialogue/Sounds/0_1__Cartoon Jump Sound Effect.mp3" id="4_rog4w"]
+[ext_resource type="AudioStream" uid="uid://ct5cfh1nvwefj" path="res://levels/Npc_test_dialogue/Sounds/Landinig_brick_sound.mp3" id="5_t8xyc"]
+[ext_resource type="AudioStream" uid="uid://bhd8o8kh64mba" path="res://levels/Npc_test_dialogue/Sounds/Landing_grass_sound.mp3" id="6_xrs7n"]
+[ext_resource type="PackedScene" uid="uid://ctxhod1yudc8i" path="res://levels/Npc_test_dialogue/ItemsHud/coin_hud.tscn" id="7_rog4w"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dbcjw"]
+radius = 167.02695
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wf57i"]
+radius = 234.67638
+
+[node name="Candyman" type="CharacterBody2D" unique_id=1431360417]
+collision_layer = 17
+collision_mask = 16
+script = ExtResource("1_dbcjw")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=337341999]
+position = Vector2(35, 19)
+texture = ExtResource("1_4u6mg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=893915821]
+position = Vector2(-7, -73)
+shape = SubResource("CircleShape2D_dbcjw")
+
+[node name="DialogueFinder" type="Area2D" parent="." unique_id=623183641]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DialogueFinder" unique_id=1285767287]
+position = Vector2(-9, -62)
+shape = SubResource("CircleShape2D_wf57i")
+
+[node name="AudioStreamPlayer_walking" type="AudioStreamPlayer2D" parent="." unique_id=2018931428]
+stream = ExtResource("3_qfvsd")
+volume_db = 5.045
+pitch_scale = 2.0
+bus = &"SFX"
+
+[node name="AudioStreamPlayer_jumping" type="AudioStreamPlayer2D" parent="." unique_id=380616373]
+stream = ExtResource("4_rog4w")
+volume_db = 6.577
+
+[node name="AudioStreamPlayer_landing_brick" type="AudioStreamPlayer2D" parent="." unique_id=1453657963]
+stream = ExtResource("5_t8xyc")
+
+[node name="AudioStreamPlayer_landing_grass" type="AudioStreamPlayer2D" parent="." unique_id=1850615768]
+stream = ExtResource("6_xrs7n")
+
+[node name="Coin_hud" parent="." unique_id=1075163448 instance=ExtResource("7_rog4w")]
