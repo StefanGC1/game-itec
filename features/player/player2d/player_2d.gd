@@ -7,6 +7,7 @@ const GRAVITY = 900.0
 @onready var foot_pos_marker = $FootPosition
 
 signal switch_layer(direction: int, player_position: Vector2)
+signal preview_layers(isActive: bool)
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -32,3 +33,8 @@ func _input(event: InputEvent) -> void:
 		emit_signal("switch_layer", 1, foot_pos_marker.global_position)
 	elif event.is_action_pressed("2d_layer_backward"):
 		emit_signal("switch_layer", -1, foot_pos_marker.global_position)
+
+	if event.is_action_pressed("2d_layer_preview"):
+		emit_signal("preview_layers", true)
+	elif event.is_action_released("2d_layer_preview"):
+		emit_signal("preview_layers", false)

@@ -4,3 +4,7 @@
 
 [node name="ZLayerSwitch" type="Node" unique_id=1182993615]
 script = ExtResource("1_7l44s")
+preview_opacity = null
+preview_vertical_offset = null
+preview_next_tint = null
+preview_previous_tint = null

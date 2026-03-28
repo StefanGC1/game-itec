@@ -8,6 +8,7 @@ func _ready() -> void:
 	
 	# Wire up signal from player to z_layer_switch
 	player.connect("switch_layer", z_layer_switch._switch_layer)
+	player.connect("preview_layers", z_layer_switch._set_preview_active)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
