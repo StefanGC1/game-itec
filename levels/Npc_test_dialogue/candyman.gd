@@ -12,11 +12,13 @@ var coins
 @onready var mining_reach_shape = $Mining_detector/CollisionShape2D
 @onready var player_landing_audio_bricks = $AudioStreamPlayer_landing_brick
 @onready var red_stone_label = $Hud_red_stone/GridContainer/Sprite2D/Label
+@onready var coin_label = $Coin_hud/GridContainer/Sprite2D/Label
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 signal speaking
 signal digging_completed(target_global_position)
 var dig_timer = 0.0
 @export var dig_duration_stone_drill_1 = 1.5
+@export var tile_map: TileMapLayer
 var is_digging = false
 var was_in_air = false	
 
@@ -52,11 +54,6 @@ func _physics_process(delta: float) -> void:
 	else: player_walking_audio_stream.stop()
 	position.x = clamp(position.x,-2000,2300)
 	position.y = clamp(position.y,-800, 1350)
-	
-	if Input.is_action_pressed("mining_2d"):
-		is_digging = true
-	
-
 	move_and_slide()
 	
 	if not was_in_air and not is_on_floor():
@@ -68,6 +65,12 @@ func _process(delta: float) -> void:
 	var mouse_pos = get_global_mouse_position()
 	var allowed_radius = mining_reach_shape.shape.radius
 	var is_mouse_in_range = global_position.distance_to(mouse_pos) <= allowed_radius
+	var tile_data = null
+	if tile_map != null:
+		var local_mouse_pos = tile_map.to_local(mouse_pos)
+		var map_pos = tile_map.local_to_map(local_mouse_pos)
+		tile_data = tile_map.get_cell_tile_data(map_pos)
+	
 	if Input.is_action_just_pressed("Talk") and  actionable_finder.has_overlapping_bodies() and is_in_dialogue== false:
 		is_in_dialogue = true
 		velocity = Vector2.ZERO
@@ -76,11 +79,10 @@ func _process(delta: float) -> void:
 		return
 		
 		
-	if Input.is_action_pressed("mining_2d") and is_mouse_in_range:
+	if Input.is_action_pressed("mining_2d") and is_mouse_in_range and tile_map != null and tile_data != null:
 		mining_bar.visible = true
 		is_digging = true
 		dig_timer += delta
-		print(dig_timer)
 		mining_bar.value = (dig_timer/dig_duration_stone_drill_1) * 100
 		#mining
 		current_fuel = current_fuel - draining_rate_mining * delta
@@ -117,6 +119,10 @@ func _on_dialogue_finder_area_entered(area: Area2D) -> void:
 	if area.is_in_group("red_stone"):
 		GameState.add_inventory_item("adamantite", 1)
 		red_stone_label.text = str(GameState.inventory.get("adamantite"))
+	if area.is_in_group("coins"):
+		print("Sunt ban")
+		GameState.add_inventory_item("credits", 1)
+		coin_label.text = str(GameState.inventory.get("credits"))
 		
 		
 		
