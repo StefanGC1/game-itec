@@ -1,12 +1,15 @@
 extends Node
 class_name CaveGenerator
 
+const CaveRockEntryResource := preload("res://features/cave/cave_generator/cave_rock_entry.gd")
+const CaveOreEntryResource := preload("res://features/cave/cave_generator/cave_ore_entry.gd")
+
 @export_group("Tile Set")
 @export var tile_set: TileSet
 
 @export_group("Tile Coordinates")
-@export var rock_tiles: Array[Vector2i] = [Vector2i(0, 0), Vector2i(0, 1)]
-@export var rock_tile_weights: Array[float] = [0.6, 0.4]
+@export var rock_entries: Array[Resource] = []
+@export var ore_entries: Array[Resource] = []
 @export var tier_gate_tile: Vector2i = Vector2i(0, 3)
 @export var empty_tile: Vector2i = Vector2i(4, 0)
 @export var atlas_source_id: int = 0
@@ -46,6 +49,8 @@ func _ready() -> void:
 		if parent_node:
 			entrance_layout_layer = parent_node.get_node_or_null("TileMapLayer") as TileMapLayer
 
+	_ensure_default_rock_entries()
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -71,6 +76,7 @@ func generate() -> Array[TileMapLayer]:
 		_stamp_tier_gates(grid)
 		_paint_grid_to_layer(grid, _generated_layers[layer_index])
 		_stamp_entrance_layout(_generated_layers[layer_index])
+		_force_tier_gates_on_layer(_generated_layers[layer_index])
 
 	if hide_entrance_layout_after_generate and entrance_layout_layer:
 		entrance_layout_layer.visible = false
@@ -132,7 +138,7 @@ func _generate_base_grid() -> Array:
 		for x in range(max(width, 1)):
 			var is_border := x == 0 or y == 0 or x == width - 1 or y == height - 1
 			if is_border:
-				row.append(CellType.ROCK)
+				row.append(CellType.TIER_GATE)
 			else:
 				var roll := _rng.randf()
 				row.append(CellType.ROCK if roll < initial_stone_chance else CellType.EMPTY)
@@ -194,6 +200,34 @@ func _stamp_tier_gates(grid: Array) -> void:
 				grid[y][x] = CellType.TIER_GATE
 
 
+func _force_tier_gates_on_layer(layer: TileMapLayer) -> void:
+	var x_offset := floori(float(width) / 2.0)
+
+	# Always keep map borders as tier gate.
+	for x in range(width):
+		var left_right_top := Vector2i(x - x_offset, 0)
+		var left_right_bottom := Vector2i(x - x_offset, height - 1)
+		layer.set_cell(left_right_top, atlas_source_id, tier_gate_tile, atlas_alternative_id)
+		layer.set_cell(left_right_bottom, atlas_source_id, tier_gate_tile, atlas_alternative_id)
+
+	for y in range(height):
+		var left_cell := Vector2i(-x_offset, y)
+		var right_cell := Vector2i((width - 1) - x_offset, y)
+		layer.set_cell(left_cell, atlas_source_id, tier_gate_tile, atlas_alternative_id)
+		layer.set_cell(right_cell, atlas_source_id, tier_gate_tile, atlas_alternative_id)
+
+	# Re-apply horizontal separator gates so entrance empty markers cannot erase them.
+	var separators: Array[int] = [tier2_sep_at, tier3_sep_at]
+	for start_y in separators:
+		if start_y < 0 or start_y >= height:
+			continue
+
+		for y in range(start_y, min(start_y + separator_height, height)):
+			for x in range(width):
+				var map_cell := Vector2i(x - x_offset, y)
+				layer.set_cell(map_cell, atlas_source_id, tier_gate_tile, atlas_alternative_id)
+
+
 func _paint_grid_to_layer(grid: Array, layer: TileMapLayer) -> void:
 	layer.clear()
 
@@ -241,70 +275,64 @@ func _stamp_entrance_layout(target_layer: TileMapLayer) -> void:
 
 
 func _pick_weighted_rock_tile() -> Vector2i:
-	if rock_tiles.is_empty():
+	_ensure_default_rock_entries()
+	if rock_entries.is_empty():
 		return Vector2i.ZERO
 
-	var effective_weights: Array[float] = _build_effective_rock_weights()
-	if effective_weights.is_empty():
-		return rock_tiles[0]
-
 	var total_weight := 0.0
-	for weight in effective_weights:
-		total_weight += max(weight, 0.0)
+	for entry in rock_entries:
+		if entry == null:
+			continue
+		total_weight += max(entry.weight, 0.0)
 
 	if total_weight <= 0.0:
-		return rock_tiles[0]
+		for fallback_entry in rock_entries:
+			if fallback_entry != null:
+				return fallback_entry.atlas_coords
+		return Vector2i.ZERO
 
 	var roll := _rng.randf() * total_weight
 	var running := 0.0
 
-	for i in range(rock_tiles.size()):
-		running += max(effective_weights[i], 0.0)
+	for entry in rock_entries:
+		if entry == null:
+			continue
+		running += max(entry.weight, 0.0)
 		if roll <= running:
-			return rock_tiles[i]
+			return entry.atlas_coords
 
-	return rock_tiles[rock_tiles.size() - 1]
+	for i in range(rock_entries.size() - 1, -1, -1):
+		if rock_entries[i] != null:
+			return rock_entries[i].atlas_coords
+
+	return Vector2i.ZERO
 
 
-func _build_effective_rock_weights() -> Array[float]:
-	var weights: Array[float] = []
-	for i in range(rock_tiles.size()):
-		var fallback_weight := 1.0
-		if i < rock_tile_weights.size():
-			fallback_weight = rock_tile_weights[i]
+func _ensure_default_rock_entries() -> void:
+	if not rock_entries.is_empty():
+		return
 
-		var custom_weight: Variant = _get_custom_data_value(atlas_source_id, rock_tiles[i], atlas_alternative_id, "gen_weight", fallback_weight)
-		weights.append(float(custom_weight))
+	var rock_a: Resource = CaveRockEntryResource.new()
+	rock_a.atlas_coords = Vector2i(0, 0)
+	rock_a.weight = 0.6
 
-	return weights
+	var rock_b: Resource = CaveRockEntryResource.new()
+	rock_b.atlas_coords = Vector2i(0, 1)
+	rock_b.weight = 0.4
+
+	rock_entries = [rock_a, rock_b]
 
 
 func _is_empty_tile(source_id: int, atlas_coords: Vector2i, alternative_id: int) -> bool:
+	# Generation no longer depends on custom tile data.
+	# Empty handling is editor-defined by explicit empty tile coordinate.
+	if source_id != atlas_source_id:
+		return false
+
+	if alternative_id != atlas_alternative_id:
+		return false
+
 	if atlas_coords == empty_tile:
 		return true
 
-	var type_value: Variant = _get_custom_data_value(source_id, atlas_coords, alternative_id, "type", "")
-	if str(type_value) == "empty":
-		return true
-
-	var is_empty_value: Variant = _get_custom_data_value(source_id, atlas_coords, alternative_id, "is_empty", false)
-	return bool(is_empty_value)
-
-
-func _get_custom_data_value(source_id: int, atlas_coords: Vector2i, alternative_id: int, key: String, default_value: Variant) -> Variant:
-	if tile_set == null:
-		return default_value
-
-	var source := tile_set.get_source(source_id) as TileSetAtlasSource
-	if source == null:
-		return default_value
-
-	var tile_data := source.get_tile_data(atlas_coords, alternative_id)
-	if tile_data == null:
-		return default_value
-
-	var value: Variant = tile_data.get_custom_data(key)
-	if value == null:
-		return default_value
-
-	return value
+	return false
