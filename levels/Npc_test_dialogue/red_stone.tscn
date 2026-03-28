@@ -1,11 +1,13 @@
 [gd_scene format=3 uid="uid://bnyph8oktn8w4"]
 
 [ext_resource type="Texture2D" uid="uid://ibuoxi1fp7wx" path="res://assets/Stones/red_stone.png" id="1_0d41o"]
+[ext_resource type="Script" uid="uid://clj405tmari2" path="res://levels/Npc_test_dialogue/red_stone.gd" id="1_p4qwj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p4qwj"]
 size = Vector2(119, 90)
 
-[node name="RedStone" type="Area2D" unique_id=497093771]
+[node name="RedStone" type="Area2D" unique_id=497093771 groups=["red_stone"]]
+script = ExtResource("1_p4qwj")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=589627062]
 texture = ExtResource("1_0d41o")

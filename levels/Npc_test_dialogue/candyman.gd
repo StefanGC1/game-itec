@@ -11,6 +11,7 @@ var coins
 @onready var player_jumping_audio_stream = $AudioStreamPlayer_jumping
 @onready var mining_reach_shape = $Mining_detector/CollisionShape2D
 @onready var player_landing_audio_bricks = $AudioStreamPlayer_landing_brick
+@onready var red_stone_label = $Hud_red_stone/GridContainer/Sprite2D/Label
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 signal speaking
 signal digging_completed(target_global_position)
@@ -18,6 +19,18 @@ var dig_timer = 0.0
 @export var dig_duration_stone_drill_1 = 1.5
 var is_digging = false
 var was_in_air = false	
+
+#combustibi;
+@onready var fuel_bar = $Fuel_hiud/ProgressBar
+var current_fuel 
+var max_fuel 
+var draining_rate_idle = 0.5
+var draining_rate_mining = 1
+
+func _ready() -> void:
+	max_fuel = fuel_bar.max_value
+	current_fuel = fuel_bar.value
+
 func _physics_process(delta: float) -> void:
 
 	if not is_on_floor() and not is_in_dialogue:
@@ -69,7 +82,11 @@ func _process(delta: float) -> void:
 		dig_timer += delta
 		print(dig_timer)
 		mining_bar.value = (dig_timer/dig_duration_stone_drill_1) * 100
-		
+		#mining
+		current_fuel = current_fuel - draining_rate_mining * delta
+		fuel_bar.value = current_fuel
+	
+				
 		if dig_timer >= dig_duration_stone_drill_1:
 			_on_dig_success(mouse_pos)
 			
@@ -78,6 +95,9 @@ func _process(delta: float) -> void:
 		dig_timer = 0.0
 		mining_bar.visible = false
 		mining_bar.value = 0
+		#mining
+		current_fuel = current_fuel - draining_rate_idle * delta
+		fuel_bar.value = current_fuel
 		
 func _on_dialogue_ended(_resource: DialogueResource):
 	is_in_dialogue = false
@@ -88,4 +108,15 @@ func _on_dig_success(pos: Vector2):
 	mining_bar.visible = false
 	digging_completed.emit(pos)
 	is_digging = false
+	
+func _on_dialogue_finder_area_entered(area: Area2D) -> void:
+	
+	if area.has_method("collect"):
+		area.collect()
+	
+	if area.is_in_group("red_stone"):
+		GameState.add_inventory_item("adamantite", 1)
+		red_stone_label.text = str(GameState.inventory.get("adamantite"))
+		
+		
 		
