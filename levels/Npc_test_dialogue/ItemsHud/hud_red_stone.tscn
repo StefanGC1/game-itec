@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://c6qtmytc18d4f"]
+
+[ext_resource type="Texture2D" uid="uid://ibuoxi1fp7wx" path="res://assets/Stones/red_stone.png" id="1_80hig"]
+
+[node name="Hud_red_stone" type="CanvasLayer" unique_id=1358409390]
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=1975477694]
+offset_left = 29.0
+offset_top = 212.0
+offset_right = 210.0
+offset_bottom = 308.0
+
+[node name="Sprite2D" type="Sprite2D" parent="GridContainer" unique_id=550352892]
+position = Vector2(58, 0)
+texture = ExtResource("1_80hig")
+
+[node name="Label" type="Label" parent="GridContainer/Sprite2D" unique_id=2067657674]
+offset_left = -4.0
+offset_top = -150.0
+offset_right = 176.0
+offset_bottom = -60.0
+theme_override_font_sizes/font_size = 64
+text = "0"
