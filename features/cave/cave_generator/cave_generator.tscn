@@ -4,3 +4,4 @@
 
 [node name="CaveGenerator" type="Node" unique_id=1078709370]
 script = ExtResource("1_5ss8d")
+zlayer_amount = 5

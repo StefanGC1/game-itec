@@ -15,6 +15,7 @@ var FULL_OPACITY: float = 255.0
 @export var tile_map_layers: Array[TileMapLayer] = []
 @export var starting_layer: int = 0
 var current_layer: int = 0
+var _is_initialized: bool = false
 
 var preview_active: bool = false
 
@@ -26,6 +27,23 @@ var preview_active: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	# If a generator exists, the level script controls order:
+	# 1) generate layers
+	# 2) call initialize_layers()
+	if cave_generator:
+		return
+
+	initialize_layers()
+
+
+func initialize_layers() -> void:
+	if _is_initialized:
+		return
+
+	if cave_generator:
+		tile_map_layers = cave_generator.get_generated_layers()
+		current_layer = 0
+
 	# Assert we have at least one TileMapLayer in the level
 	assert(tile_map_layers.size() > 0, "No TileMapLayer nodes assigned to ZLayerSwitch")
 
@@ -39,9 +57,8 @@ func _ready() -> void:
 	if starting_layer < 0 or starting_layer >= tile_map_layers.size():
 		printerr("Starting layer index is out of bounds: ", starting_layer)
 		current_layer = clamp(starting_layer, 0, tile_map_layers.size() - 1)
-	
+
 	if cave_generator:
-		tile_map_layers = cave_generator.get_generated_layers()
 		current_layer = 0
 
 	print("Current active layer: ", current_layer)
@@ -53,6 +70,8 @@ func _ready() -> void:
 		tile_map_layers[i].collision_enabled = false
 		tile_map_layers[i].modulate.a = ZERO_OPACITY
 		print("DEBUG POSITION: ", tile_map_layers[i].position)
+
+	_is_initialized = true
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:

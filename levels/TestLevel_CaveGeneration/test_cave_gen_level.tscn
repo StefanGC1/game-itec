@@ -9,6 +9,12 @@
 [node name="TestCaveGenLevel" type="Node2D" unique_id=1057932808]
 script = ExtResource("1_1ha1f")
 
+[node name="CaveGenerator" parent="." unique_id=1078709370 node_paths=PackedStringArray("entrance_layout_layer") instance=ExtResource("4_1ha1f")]
+tile_set = ExtResource("1_uluoq")
+rock_tiles = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0)])
+tier_gate_tile = Vector2i(2, 0)
+entrance_layout_layer = NodePath("../TileMapLayer")
+
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=2133349541]
 tile_map_data = PackedByteArray("AAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAABAAIAAAAAAAAAAAABAAMAAAAAAAAAAAABAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAAEAAIAAAAAAAAAAAAEAAMAAAAAAAAAAAAEAAQAAAAAAAAAAAAEAAUAAAAAAAAAAAAEAAYAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAcAAAAAAAAAAAABAAUAAAAAAAAAAAABAAYAAAAAAAAAAAABAAcAAAAAAAAAAAAFAAAAAAAAAAAAAAAFAAEAAAAAAAAAAAAFAAIAAAAAAAAAAAAFAAMAAAAAAAAAAAAFAAQAAAAAAAAAAAAFAAUAAAAAAAAAAAAFAAYAAAAAAAAAAAAFAAcAAAAAAAAAAAAEAAcAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAAsAAAAAAAAAAAABAAsAAAAAAAAAAAABAAoAAAAAAAAAAAACAAoAAAAAAAAAAAACAAsAAAAAAAAAAAADAAsAAAAAAAAAAAADAAoAAAAAAAAAAAAEAAoAAAAAAAAAAAAEAAsAAAAAAAAAAAAFAAsAAAAAAAAAAAAFAAoAAAAAAAAAAAA=")
 tile_set = ExtResource("1_uluoq")
@@ -16,8 +22,6 @@ tile_set = ExtResource("1_uluoq")
 [node name="Player2D" parent="." unique_id=204201863 instance=ExtResource("2_bl1fb")]
 position = Vector2(181, 139)
 
-[node name="ZLayerManager" parent="." unique_id=1182993615 node_paths=PackedStringArray("tile_map_layers") instance=ExtResource("3_h7rhv")]
+[node name="ZLayerManager" parent="." unique_id=1182993615 node_paths=PackedStringArray("cave_generator", "tile_map_layers") instance=ExtResource("3_h7rhv")]
+cave_generator = NodePath("../CaveGenerator")
 tile_map_layers = [NodePath("../TileMapLayer")]
-
-[node name="CaveGenerator" parent="." unique_id=1078709370 instance=ExtResource("4_1ha1f")]
-tile_set = ExtResource("1_uluoq")
