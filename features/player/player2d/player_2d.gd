@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 const SPEED = 300.0
-const JUMP_VELOCITY = -900
+const JUMP_VELOCITY = -400
 const GRAVITY = 900.0
 
 @onready var foot_pos_marker = $FootPosition

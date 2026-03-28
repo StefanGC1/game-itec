@@ -1,0 +1,12 @@
+[gd_scene format=4 uid="uid://ds1kj1455yh0n"]
+
+[ext_resource type="TileSet" uid="uid://bih3btekqwv8b" path="res://shared/test_gen_tileset/test_gen_tileset.tres" id="1_uluoq"]
+[ext_resource type="PackedScene" uid="uid://ci6n83k74ykvr" path="res://features/player/player2d/player2d.tscn" id="2_bl1fb"]
+
+[node name="TestCaveGenLevel" type="Node2D" unique_id=1057932808]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=2133349541]
+tile_map_data = PackedByteArray("AAAAAAQAAAAAAAAAAAABAAQAAAAAAAAAAAACAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAFAAQAAAAAAAAAAAAAAAUAAAAAAAAAAAABAAUAAAAAAAAAAAACAAUAAAAAAAAAAAADAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAA=")
+tile_set = ExtResource("1_uluoq")
+
+[node name="Player2D" parent="." unique_id=204201863 instance=ExtResource("2_bl1fb")]
