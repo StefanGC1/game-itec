@@ -1,157 +1,135 @@
 extends CharacterBody3D
 
 
-@export var move_speed: float = 6.0
-@export var sprint_speed: float = 8.5
-@export var acceleration: float = 18.0
-@export var deceleration: float = 24.0
-@export var air_control: float = 0.45
-@export var jump_velocity: float = 5.5
-@export var gravity_scale: float = 1.15
-@export var max_fall_speed: float = 30.0
-@export var coyote_time: float = 0.12
-@export var jump_buffer_time: float = 0.12
-@export var rotate_to_move_direction: bool = true
-@export var turn_speed: float = 14.0
-@export var camera_path: NodePath
+const SPEED = 5.0
+const DRILL_MAX_LEVEL := 3
+const STAT_MAX_LEVEL := 10
+
+const DRILL_UPGRADE_COSTS: Array[int] = [0, 100, 250]
+const MINING_SPEED_UPGRADE_COSTS: Array[int] = [0, 30, 45, 60, 80, 100, 130, 160, 200, 240]
+const FUEL_UPGRADE_COSTS: Array[int] = [0, 25, 35, 50, 70, 90, 120, 150, 185, 220]
+const INVENTORY_UPGRADE_COSTS: Array[int] = [0, 20, 30, 45, 60, 80, 105, 130, 160, 195]
+
+const ACTION_LEFT := "3d_left"
+const ACTION_RIGHT := "3d_right"
+const ACTION_FORWARD := "3d_forward"
+const ACTION_BACKWARD := "3d_backward"
+
+@export var credits := 300
+
+@export_range(1, DRILL_MAX_LEVEL) var drill_level := 1
+
+@export_range(1, STAT_MAX_LEVEL) var mining_speed_level := 1
+@export_range(1, STAT_MAX_LEVEL) var fuel_capacity_level := 1
+@export_range(1, STAT_MAX_LEVEL) var inventory_capacity_level := 1
+
+@export var base_mining_speed := 1.0
+@export var base_fuel_capacity := 100.0
+@export var base_inventory_capacity := 10
+
+@export var mining_speed_per_level := 0.2
+@export var fuel_capacity_per_level := 20.0
+@export var inventory_capacity_per_level := 2
 
 
-const ACTION_LEFT := "move_left"
-const ACTION_RIGHT := "move_right"
-const ACTION_UP := "move_up"
-const ACTION_DOWN := "move_down"
-const ACTION_JUMP := "move_jump"
-const ACTION_SPRINT := "move_sprint"
+func _physics_process(_delta: float) -> void:
+	# Simple 4-direction movement: left/right on X, up/down on Z.
+	var horizontal := Input.get_action_strength(ACTION_RIGHT) - Input.get_action_strength(ACTION_LEFT)
+	var vertical := Input.get_action_strength(ACTION_BACKWARD) - Input.get_action_strength(ACTION_FORWARD)
+	var direction := Vector3(horizontal, 0.0, vertical)
+	if direction.length_squared() > 1.0:
+		direction = direction.normalized()
 
+	velocity.x = direction.x * SPEED
+	velocity.y = 0.0
+	velocity.z = direction.z * SPEED
 
-var _coyote_timer: float = 0.0
-var _jump_buffer_timer: float = 0.0
-
-
-func _ready() -> void:
-	_ensure_default_input_map()
-
-
-func _physics_process(delta: float) -> void:
-	_update_jump_timers(delta)
-
-	if _can_jump_now():
-		velocity.y = jump_velocity
-		_jump_buffer_timer = 0.0
-		_coyote_timer = 0.0
-
-	_apply_gravity(delta)
-	_apply_horizontal_movement(delta)
 	move_and_slide()
 
 
-func _apply_gravity(delta: float) -> void:
-	if not is_on_floor():
-		velocity += get_gravity() * gravity_scale * delta
-		velocity.y = max(velocity.y, -max_fall_speed)
+func can_mine_tier(required_drill_level: int) -> bool:
+	return drill_level >= required_drill_level
 
 
-func _apply_horizontal_movement(delta: float) -> void:
-	var input_dir := Input.get_vector(ACTION_LEFT, ACTION_RIGHT, ACTION_UP, ACTION_DOWN)
-	var world_dir := _get_camera_relative_direction(input_dir)
-	var speed := sprint_speed if Input.is_action_pressed(ACTION_SPRINT) else move_speed
-	var target_horizontal := Vector3(world_dir.x, 0.0, world_dir.z) * speed
-
-	var horizontal := Vector3(velocity.x, 0.0, velocity.z)
-	var using_accel := acceleration if target_horizontal.length_squared() > 0.0 else deceleration
-	if not is_on_floor():
-		using_accel *= air_control
-
-	horizontal = horizontal.move_toward(target_horizontal, using_accel * delta)
-	velocity.x = horizontal.x
-	velocity.z = horizontal.z
-
-	if rotate_to_move_direction and world_dir.length_squared() > 0.0001:
-		var target_yaw := atan2(world_dir.x, world_dir.z)
-		rotation.y = lerp_angle(rotation.y, target_yaw, turn_speed * delta)
+func get_mining_speed() -> float:
+	return base_mining_speed + float(mining_speed_level - 1) * mining_speed_per_level
 
 
-func _get_camera_relative_direction(input_dir: Vector2) -> Vector3:
-	if input_dir.length_squared() == 0.0:
-		return Vector3.ZERO
-
-	var cam := _resolve_camera()
-	if cam == null:
-		return Vector3(input_dir.x, 0.0, input_dir.y).normalized()
-
-	var right := cam.global_transform.basis.x
-	var forward := -cam.global_transform.basis.z
-	right.y = 0.0
-	forward.y = 0.0
-
-	if right.length_squared() <= 0.0001 or forward.length_squared() <= 0.0001:
-		return Vector3(input_dir.x, 0.0, input_dir.y).normalized()
-
-	right = right.normalized()
-	forward = forward.normalized()
-	return (right * input_dir.x + forward * input_dir.y).normalized()
+func get_fuel_capacity() -> float:
+	return base_fuel_capacity + float(fuel_capacity_level - 1) * fuel_capacity_per_level
 
 
-func _resolve_camera() -> Camera3D:
-	if camera_path != NodePath():
-		var configured_camera := get_node_or_null(camera_path) as Camera3D
-		if configured_camera != null:
-			return configured_camera
-
-	var viewport_camera := get_viewport().get_camera_3d()
-	if viewport_camera != null:
-		return viewport_camera
-
-	return get_node_or_null("CameraPivot/Camera3D") as Camera3D
+func get_inventory_capacity() -> int:
+	return base_inventory_capacity + (inventory_capacity_level - 1) * inventory_capacity_per_level
 
 
-func _update_jump_timers(delta: float) -> void:
-	if is_on_floor():
-		_coyote_timer = coyote_time
-	else:
-		_coyote_timer = max(_coyote_timer - delta, 0.0)
-
-	if Input.is_action_just_pressed(ACTION_JUMP):
-		_jump_buffer_timer = jump_buffer_time
-	else:
-		_jump_buffer_timer = max(_jump_buffer_timer - delta, 0.0)
-
-
-func _can_jump_now() -> bool:
-	return _jump_buffer_timer > 0.0 and _coyote_timer > 0.0
+func get_upgrade_state() -> Dictionary:
+	return {
+		"credits": credits,
+		"drill_level": drill_level,
+		"mining_speed_level": mining_speed_level,
+		"fuel_capacity_level": fuel_capacity_level,
+		"inventory_capacity_level": inventory_capacity_level,
+		"mining_speed": get_mining_speed(),
+		"fuel_capacity": get_fuel_capacity(),
+		"inventory_capacity": get_inventory_capacity()
+	}
 
 
-func _ensure_default_input_map() -> void:
-	_ensure_action(ACTION_LEFT)
-	_ensure_action(ACTION_RIGHT)
-	_ensure_action(ACTION_UP)
-	_ensure_action(ACTION_DOWN)
-	_ensure_action(ACTION_JUMP)
-	_ensure_action(ACTION_SPRINT)
+func try_upgrade_drill() -> Dictionary:
+	if drill_level >= DRILL_MAX_LEVEL:
+		return {"success": false, "message": "Drill is already max level."}
 
-	_add_key_if_missing(ACTION_LEFT, KEY_A)
-	_add_key_if_missing(ACTION_LEFT, KEY_LEFT)
-	_add_key_if_missing(ACTION_RIGHT, KEY_D)
-	_add_key_if_missing(ACTION_RIGHT, KEY_RIGHT)
-	_add_key_if_missing(ACTION_UP, KEY_W)
-	_add_key_if_missing(ACTION_UP, KEY_UP)
-	_add_key_if_missing(ACTION_DOWN, KEY_S)
-	_add_key_if_missing(ACTION_DOWN, KEY_DOWN)
-	_add_key_if_missing(ACTION_JUMP, KEY_SPACE)
-	_add_key_if_missing(ACTION_SPRINT, KEY_SHIFT)
+	var cost: int = DRILL_UPGRADE_COSTS[drill_level]
+	if credits < cost:
+		return {"success": false, "message": "Not enough credits for drill upgrade (" + str(cost) + ")."}
+
+	credits -= cost
+	drill_level += 1
+	return {"success": true, "message": "Drill upgraded to level " + str(drill_level) + "."}
 
 
-func _ensure_action(action: StringName) -> void:
-	if not InputMap.has_action(action):
-		InputMap.add_action(action)
+func try_upgrade_mining_speed() -> Dictionary:
+	return _try_upgrade_stat("mining_speed")
 
 
-func _add_key_if_missing(action: StringName, keycode: Key) -> void:
-	var events := InputMap.action_get_events(action)
-	for e in events:
-		if e is InputEventKey and e.physical_keycode == keycode:
-			return
+func try_upgrade_fuel_capacity() -> Dictionary:
+	return _try_upgrade_stat("fuel_capacity")
 
-	var key_event := InputEventKey.new()
-	key_event.physical_keycode = keycode
-	InputMap.action_add_event(action, key_event)
+
+func try_upgrade_inventory_capacity() -> Dictionary:
+	return _try_upgrade_stat("inventory_capacity")
+
+
+func _try_upgrade_stat(stat_name: String) -> Dictionary:
+	var level_ref: String = ""
+	var costs: Array = []
+	var label := ""
+
+	match stat_name:
+		"mining_speed":
+			level_ref = "mining_speed_level"
+			costs = MINING_SPEED_UPGRADE_COSTS
+			label = "Mining Speed"
+		"fuel_capacity":
+			level_ref = "fuel_capacity_level"
+			costs = FUEL_UPGRADE_COSTS
+			label = "Fuel Capacity"
+		"inventory_capacity":
+			level_ref = "inventory_capacity_level"
+			costs = INVENTORY_UPGRADE_COSTS
+			label = "Inventory Capacity"
+		_:
+			return {"success": false, "message": "Unknown stat upgrade."}
+
+	var current_level := int(get(level_ref))
+	if current_level >= STAT_MAX_LEVEL:
+		return {"success": false, "message": label + " is already max level."}
+
+	var cost: int = int(costs[current_level])
+	if credits < cost:
+		return {"success": false, "message": "Not enough credits for " + label + " (" + str(cost) + ")."}
+
+	credits -= cost
+	set(level_ref, current_level + 1)
+	return {"success": true, "message": label + " upgraded to level " + str(current_level + 1) + "."}
