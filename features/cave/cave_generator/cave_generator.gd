@@ -2,7 +2,6 @@ extends Node
 class_name CaveGenerator
 
 const CaveRockEntryResource := preload("res://features/cave/cave_generator/cave_rock_entry.gd")
-const CaveOreEntryResource := preload("res://features/cave/cave_generator/cave_ore_entry.gd")
 
 @export_group("Tile Set")
 @export var tile_set: TileSet
@@ -40,6 +39,7 @@ enum CellType {
 
 var _rng := RandomNumberGenerator.new()
 var _generated_layers: Array[TileMapLayer] = []
+var _x_offset: int = 0
 
 
 # Called when the node enters the scene tree for the first time.
@@ -52,10 +52,6 @@ func _ready() -> void:
 	_ensure_default_rock_entries()
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
-
 func generate() -> Array[TileMapLayer]:
 	if tile_set == null:
 		push_error("CaveGenerator: TileSet is missing.")
@@ -67,6 +63,7 @@ func generate() -> Array[TileMapLayer]:
 	else:
 		_rng.seed = rng_seed
 
+	_x_offset = floori(float(width) / 2.0)
 	_cleanup_previous_generated_layers()
 	_generated_layers = _create_layers()
 
@@ -75,6 +72,7 @@ func generate() -> Array[TileMapLayer]:
 		grid = _smooth_grid(grid)
 		_stamp_tier_gates(grid)
 		_paint_grid_to_layer(grid, _generated_layers[layer_index])
+		_place_ores_on_layer(grid, _generated_layers[layer_index])
 		_stamp_entrance_layout(_generated_layers[layer_index])
 		_force_tier_gates_on_layer(_generated_layers[layer_index])
 
@@ -89,11 +87,6 @@ func get_generated_layers() -> Array[TileMapLayer]:
 	if _generated_layers.is_empty():
 		return generate()
 	return _generated_layers
-
-
-func get_generated_z_layers() -> Array[TileMapLayer]:
-	# Backward compatible alias.
-	return get_generated_layers()
 
 
 func _cleanup_previous_generated_layers() -> void:
@@ -201,18 +194,16 @@ func _stamp_tier_gates(grid: Array) -> void:
 
 
 func _force_tier_gates_on_layer(layer: TileMapLayer) -> void:
-	var x_offset := floori(float(width) / 2.0)
-
 	# Always keep map borders as tier gate.
 	for x in range(width):
-		var left_right_top := Vector2i(x - x_offset, 0)
-		var left_right_bottom := Vector2i(x - x_offset, height - 1)
+		var left_right_top := Vector2i(x - _x_offset, 0)
+		var left_right_bottom := Vector2i(x - _x_offset, height - 1)
 		layer.set_cell(left_right_top, atlas_source_id, tier_gate_tile, atlas_alternative_id)
 		layer.set_cell(left_right_bottom, atlas_source_id, tier_gate_tile, atlas_alternative_id)
 
 	for y in range(height):
-		var left_cell := Vector2i(-x_offset, y)
-		var right_cell := Vector2i((width - 1) - x_offset, y)
+		var left_cell := Vector2i(-_x_offset, y)
+		var right_cell := Vector2i((width - 1) - _x_offset, y)
 		layer.set_cell(left_cell, atlas_source_id, tier_gate_tile, atlas_alternative_id)
 		layer.set_cell(right_cell, atlas_source_id, tier_gate_tile, atlas_alternative_id)
 
@@ -224,26 +215,93 @@ func _force_tier_gates_on_layer(layer: TileMapLayer) -> void:
 
 		for y in range(start_y, min(start_y + separator_height, height)):
 			for x in range(width):
-				var map_cell := Vector2i(x - x_offset, y)
+				var map_cell := Vector2i(x - _x_offset, y)
 				layer.set_cell(map_cell, atlas_source_id, tier_gate_tile, atlas_alternative_id)
 
 
 func _paint_grid_to_layer(grid: Array, layer: TileMapLayer) -> void:
 	layer.clear()
 
-	var x_offset := floori(float(width) / 2.0)
-
 	for y in range(height):
 		for x in range(width):
-			var map_cell := Vector2i(x - x_offset, y)
+			var map_cell := Vector2i(x - _x_offset, y)
 			match grid[y][x]:
-				CellType.EMPTY:
-					layer.erase_cell(map_cell)
 				CellType.ROCK:
 					var rock_tile := _pick_weighted_rock_tile()
 					layer.set_cell(map_cell, atlas_source_id, rock_tile, atlas_alternative_id)
 				CellType.TIER_GATE:
 					layer.set_cell(map_cell, atlas_source_id, tier_gate_tile, atlas_alternative_id)
+
+
+func _place_ores_on_layer(grid: Array, layer: TileMapLayer) -> void:
+	if ore_entries.is_empty():
+		return
+
+	var ore_cells := {}
+	var ore_counts := {}
+	for entry in ore_entries:
+		if entry == null:
+			continue
+		var placed := _place_ore_veins(grid, layer, entry, ore_cells)
+		var id: String = entry.ore_id if entry.ore_id != "" else str(entry.atlas_variants)
+		ore_counts[id] = ore_counts.get(id, 0) + placed
+
+	for ore_id in ore_counts:
+		print("CaveGenerator: %s — %d tiles" % [ore_id, ore_counts[ore_id]])
+
+
+func _place_ore_veins(grid: Array, layer: TileMapLayer, ore: Resource, ore_cells: Dictionary) -> int:
+	var y_min := clampi(ore.depth_min, 1, height - 2)
+	var y_max := clampi(ore.depth_max, 1, height - 2)
+	var total_placed := 0
+
+	for y in range(y_min, y_max + 1):
+		for x in range(1, width - 1):
+			if grid[y][x] != CellType.ROCK:
+				continue
+			var cell := Vector2i(x, y)
+			if ore_cells.has(cell):
+				continue
+			if _rng.randf() >= ore.vein_spawn_chance:
+				continue
+
+			var vein_size := _rng.randi_range(ore.vein_min_size, ore.vein_max_size)
+			var vein := _grow_vein(grid, cell, vein_size, ore_cells)
+			total_placed += vein.size()
+
+			for vein_cell in vein:
+				var map_pos := Vector2i(vein_cell.x - _x_offset, vein_cell.y)
+				var tile: Vector2i = ore.atlas_variants[_rng.randi() % ore.atlas_variants.size()]
+				layer.set_cell(map_pos, atlas_source_id, tile, atlas_alternative_id)
+
+	return total_placed
+
+
+func _grow_vein(grid: Array, start: Vector2i, target_size: int, ore_cells: Dictionary) -> Array[Vector2i]:
+	var placed: Array[Vector2i] = []
+	var candidates: Array[Vector2i] = [start]
+
+	while placed.size() < target_size and not candidates.is_empty():
+		var idx := _rng.randi() % candidates.size()
+		var cell: Vector2i = candidates[idx]
+		candidates.remove_at(idx)
+
+		if ore_cells.has(cell):
+			continue
+		if cell.x <= 0 or cell.y <= 0 or cell.x >= width - 1 or cell.y >= height - 1:
+			continue
+		if grid[cell.y][cell.x] != CellType.ROCK:
+			continue
+
+		ore_cells[cell] = true
+		placed.append(cell)
+
+		for offset in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
+			var neighbor: Vector2i = cell + offset
+			if not ore_cells.has(neighbor):
+				candidates.append(neighbor)
+
+	return placed
 
 
 func _stamp_entrance_layout(target_layer: TileMapLayer) -> void:
@@ -275,7 +333,6 @@ func _stamp_entrance_layout(target_layer: TileMapLayer) -> void:
 
 
 func _pick_weighted_rock_tile() -> Vector2i:
-	_ensure_default_rock_entries()
 	if rock_entries.is_empty():
 		return Vector2i.ZERO
 

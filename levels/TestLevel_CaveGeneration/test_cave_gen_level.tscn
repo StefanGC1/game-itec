@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bpmj14aficryf" path="res://features/z_layer_manager/z_layer_manager.tscn" id="3_h7rhv"]
 [ext_resource type="PackedScene" uid="uid://ba1o6kpqmg2kn" path="res://features/cave/cave_generator/cave_generator.tscn" id="4_1ha1f"]
 [ext_resource type="Script" uid="uid://bmpmqdnt1umb0" path="res://features/cave/cave_generator/cave_rock_entry.gd" id="4_j5tln"]
+[ext_resource type="Script" uid="uid://c8wjq23hanmux" path="res://features/cave/cave_generator/cave_ore_entry.gd" id="5_5ugk7"]
 
 [sub_resource type="Resource" id="Resource_5ugk7"]
 script = ExtResource("4_j5tln")
@@ -16,13 +17,21 @@ script = ExtResource("4_j5tln")
 atlas_coords = Vector2i(1, 0)
 weight = 0.4
 
+[sub_resource type="Resource" id="Resource_q6ygn"]
+script = ExtResource("5_5ugk7")
+atlas_variants = Array[Vector2i]([Vector2i(3, 0), Vector2i(4, 2)])
+depth_max = 150
+vein_spawn_chance = 0.015
+metadata/_custom_type_script = "uid://c8wjq23hanmux"
+
 [node name="TestCaveGenLevel" type="Node2D" unique_id=1057932808]
 script = ExtResource("1_1ha1f")
 
 [node name="CaveGenerator" parent="." unique_id=1078709370 node_paths=PackedStringArray("entrance_layout_layer") instance=ExtResource("4_1ha1f")]
 tile_set = ExtResource("1_uluoq")
 rock_entries = Array[Resource]([SubResource("Resource_5ugk7"), SubResource("Resource_0nhw3")])
-tier_gate_tile = Vector2i(2, 0)
+ore_entries = Array[Resource]([SubResource("Resource_q6ygn")])
+tier_gate_tile = Vector2i(4, 2)
 initial_stone_chance = 0.5
 entrance_layout_layer = NodePath("../TileMapLayer")
 
