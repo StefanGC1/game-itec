@@ -1,6 +1,6 @@
 @tool
 extends Node
-class_name ZLayerSwitch
+class_name ZLayerManager
 
 # Test stage
 
@@ -15,10 +15,10 @@ var current_layer: int = 0
 
 var preview_active: bool = false
 
-@export var preview_opacity: float = 0.1
+@export var preview_opacity: float = 0.4
 @export var preview_vertical_offset: float = 8.0
-@export var preview_next_tint: Color = Color(0.6, 1.0, 0.6, 1.0)
-@export var preview_previous_tint: Color = Color(1.0, 0.6, 0.6, 1.0)
+@export var preview_next_tint: Color = Color(0.0, 0.671, 0.139, 1.0)
+@export var preview_previous_tint: Color = Color(0.773, 0.0, 0.194, 1.0)
 
 
 # Called when the node enters the scene tree for the first time.
@@ -65,15 +65,15 @@ func preview_layers() -> void:
 	if current_layer - 1 >= 0:
 		var previous_layer: TileMapLayer = tile_map_layers[current_layer - 1] as TileMapLayer
 		previous_layer.modulate = preview_previous_tint
-		previous_layer.modulate.a = preview_opacity 
-		previous_layer.position -= Vector2(0, preview_vertical_offset)
+		previous_layer.modulate.a = preview_opacity
+		previous_layer.position.y = -preview_vertical_offset
 	
 	# Next layer
 	if current_layer + 1 < tile_map_layers.size():
 		var next_layer: TileMapLayer = tile_map_layers[current_layer + 1] as TileMapLayer
 		next_layer.modulate = preview_next_tint
 		next_layer.modulate.a = preview_opacity
-		next_layer.position += Vector2(0, preview_vertical_offset)
+		next_layer.position.y = preview_vertical_offset
 
 func reset_layers_preview() -> void:
 	# Previous layer
@@ -81,14 +81,14 @@ func reset_layers_preview() -> void:
 		var previous_layer: TileMapLayer = tile_map_layers[current_layer - 1] as TileMapLayer
 		previous_layer.modulate = Color(1, 1, 1, 1)
 		previous_layer.modulate.a = ZERO_OPACITY
-		previous_layer.position += Vector2(0, preview_vertical_offset)
+		previous_layer.position.y = 0
 	
 	# Next layer
 	if current_layer + 1 < tile_map_layers.size():
 		var next_layer: TileMapLayer = tile_map_layers[current_layer + 1] as TileMapLayer
 		next_layer.modulate = Color(1, 1, 1, 1)
 		next_layer.modulate.a = ZERO_OPACITY
-		next_layer.position -= Vector2(0, preview_vertical_offset)
+		next_layer.position.y = 0
 
 # ================ LAYER SWITCHING ================
 
@@ -97,7 +97,7 @@ func _switch_layer(direction: int, player_position: Vector2) -> void:
 	if direction != 1 and direction != -1:
 		print("Invalid direction: ", direction)
 		return
-	
+
 	# Check array oob
 	if current_layer + direction < 0 or current_layer + direction >= tile_map_layers.size():
 		print("Cannot switch layer, out of bounds: ", current_layer + direction)
@@ -107,6 +107,13 @@ func _switch_layer(direction: int, player_position: Vector2) -> void:
 
 	# Reset current preview selection
 	reset_layers_preview()
+
+	# Continue switch after physics step so tilemap/collision transforms are stable
+	_finish_switch_next_physics(direction, player_position)
+
+func _finish_switch_next_physics(direction: int, player_position: Vector2) -> void:
+	await get_tree().physics_frame
+	await get_tree().physics_frame
 
 	# Check valid switch
 	if not is_valid_switch(direction, player_position):

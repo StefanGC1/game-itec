@@ -3,9 +3,7 @@
 [ext_resource type="TileSet" uid="uid://cd8s6qnhk06dw" path="res://shared/test_zswitch_tileset/test_tileset.tres" id="1_1bf3b"]
 [ext_resource type="Script" uid="uid://by7x04ot1pfii" path="res://levels/TestLevel_TileMapLayer/test_zswitch_level.gd" id="1_uvquy"]
 [ext_resource type="PackedScene" uid="uid://ci6n83k74ykvr" path="res://features/player/player2d/player2d.tscn" id="2_pw7hf"]
-[ext_resource type="PackedScene" uid="uid://bpmj14aficryf" path="res://features/z_layer_switch/z_layer_switch.tscn" id="3_1bf3b"]
-
-[sub_resource type="TileSet" id="TileSet_1bf3b"]
+[ext_resource type="PackedScene" uid="uid://bpmj14aficryf" path="res://features/z_layer_manager/z_layer_manager.tscn" id="3_1bf3b"]
 
 [node name="TestZswitchLevel" type="Node2D" unique_id=807740461]
 script = ExtResource("1_uvquy")
@@ -31,15 +29,12 @@ tile_map_data = PackedByteArray("AAAQABYAAAAJAAQAAAARABYAAAAJAAQAAAASABYAAAAJAAQ
 tile_set = ExtResource("1_1bf3b")
 collision_enabled = false
 
-[node name="ZLayerSwitch" parent="." unique_id=1182993615 node_paths=PackedStringArray("tile_map_layers") instance=ExtResource("3_1bf3b")]
+[node name="ZLayerManager" parent="." unique_id=1182993615 node_paths=PackedStringArray("tile_map_layers") instance=ExtResource("3_1bf3b")]
 tile_map_layers = [NodePath("../ZLayer1"), NodePath("../ZLayer2"), NodePath("../ZLayer3")]
 starting_layer = 1
-preview_opacity = 0.2
-preview_vertical_offset = 2.0
-preview_next_tint = Color(0.81062585, 0, 0.2050738, 1)
-preview_previous_tint = Color(2.2043883e-05, 0.6633546, 0.13714385, 1)
-
-[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=803285481]
-tile_set = SubResource("TileSet_1bf3b")
+preview_opacity = 0.5
+preview_vertical_offset = 10.0
+preview_next_tint = Color(1.1262596e-05, 0.5996035, 0.12009109, 1)
+preview_previous_tint = Color(0.66578007, 0, 0.16155344, 1)
 
 [node name="Player2D" parent="." unique_id=204201863 instance=ExtResource("2_pw7hf")]

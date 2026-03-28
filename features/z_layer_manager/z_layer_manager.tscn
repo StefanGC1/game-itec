@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bpmj14aficryf"]
+
+[ext_resource type="Script" uid="uid://cwg6k43nsuqa1" path="res://features/z_layer_manager/z_layer_manager.gd" id="1_7l44s"]
+
+[node name="ZLayerManager" type="Node" unique_id=1182993615]
+script = ExtResource("1_7l44s")
