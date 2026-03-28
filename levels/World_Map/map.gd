@@ -30,10 +30,10 @@ func _ready() -> void:
 
 	home_village_button.pressed.connect(_on_home_village_pressed)
 	for button in village_buttons:
-		button.pressed.connect(func() -> void: _on_remote_village_pressed(button.name))
+		button.pressed.connect(_on_remote_village_pressed.bind(button.name))
 
 	for button in forestry_area_buttons:
-		button.pressed.connect(func() -> void: _on_forestry_area_pressed(button.name))
+		button.pressed.connect(_on_forestry_area_pressed.bind(button.name))
 
 	status_label = Label.new()
 	status_label.text = "Select a village to trade, or gather from forestry areas."
@@ -67,6 +67,7 @@ func _on_remote_village_pressed(village_name: String) -> void:
 
 	var game_state := get_node("/root/GameState")
 	var snapshot := game_state.call("get_trade_snapshot", village_name) as Dictionary
+	_set_map_buttons_enabled(false)
 	trade_menu.open_for_village(village_name, snapshot)
 	status_label.text = "Opened trade menu for " + village_name + "."
 
@@ -107,4 +108,13 @@ func _on_trade_sell_requested(village_id: String, item_id: String, quantity: int
 
 func _on_trade_close_requested() -> void:
 	trade_menu.close_menu()
+	_set_map_buttons_enabled(true)
 	status_label.text = "Trade menu closed. Choose another destination."
+
+
+func _set_map_buttons_enabled(enabled: bool) -> void:
+	home_village_button.disabled = not enabled
+	for button in village_buttons:
+		button.disabled = not enabled
+	for button in forestry_area_buttons:
+		button.disabled = not enabled

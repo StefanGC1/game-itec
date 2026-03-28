@@ -24,7 +24,9 @@ var current_village_id := ""
 func _ready() -> void:
 	layer = 50
 	visible = false
-	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	$Backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
+	$MarginContainer.mouse_filter = Control.MOUSE_FILTER_STOP
 	buy_wood_button.pressed.connect(func() -> void: _emit_buy("wood"))
 	sell_wood_button.pressed.connect(func() -> void: _emit_sell("wood"))
 	buy_herbs_button.pressed.connect(func() -> void: _emit_buy("herbs"))
