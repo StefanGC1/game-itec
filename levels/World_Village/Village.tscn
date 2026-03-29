@@ -372,7 +372,7 @@ script = ExtResource("3_04moi")
 tileset_texture = SubResource("CompressedTexture2D_vifwi")
 tile_size = Vector2i(64, 64)
 selected_tile_uv = Rect2(0, 64, 64, 64)
-tileset_zoom = 0.9090909090909091
+tileset_zoom = 0.9090909090909092
 autotile_tileset = SubResource("TileSet_04moi")
 autotile_active_terrain = 0
 main_app_mode = 1
@@ -413,8 +413,6 @@ volumetric_fog_density = 0.01
 script = ExtResource("3_04moi")
 tileset_texture = ExtResource("8_a006t")
 selected_tile_uv = Rect2(32, 96, 32, 32)
-selected_tiles = Array[Rect2]([Rect2(32, 96, 32, 32)])
-tileset_zoom = 1.3310000000000004
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_shop"]
 radius = 2.4
@@ -506,7 +504,7 @@ _tile_anim_indices = PackedInt32Array(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 _tile_anim_data = PackedFloat32Array()
 _quad_chunks = [NodePath("SquareChunk_R0_0_-1_C1"), NodePath("SquareChunk_R-1_0_-1_C1")]
 _triangle_chunks = [NodePath("TriangleChunk_R0_0_-1_C1"), NodePath("TriangleChunk_R-1_0_-1_C1")]
-_box_chunks = [NodePath("BoxChunk_R0_0_-1_C0")]
+_box_chunks = [NodePath("BoxChunk_R0_0_-1_C1")]
 metadata/_custom_type_script = "uid://4kv8f8ejgwqn"
 
 [node name="Area3D" type="Area3D" parent="." unique_id=1928067572]
@@ -526,3 +524,6 @@ shape = SubResource("SphereShape3D_shop")
 
 [node name="MineEntrance" type="Area3D" parent="." unique_id=883236699]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.056086, 0, -3.218833)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MineEntrance" unique_id=724110331]
+shape = SubResource("SphereShape3D_shop")

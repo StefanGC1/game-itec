@@ -4,12 +4,14 @@ const SHOP_TOGGLE_ACTION := "shop_toggle"
 const SHOP_UI_SCENE := preload("res://ui/upgrade_shop_ui.tscn")
 const INVENTORY_UI_SCENE := preload("res://ui/inventory_overlay.tscn")
 const WORLD_MAP_SCENE := "res://levels/World_Map/World_Map.tscn"
-const MAP_ENTRANCE_FALLBACK_RADIUS := 2.4
+const CAVE_LEVEL_SCENE := "res://levels/Cave_Level/cave_level.tscn"
+const ENTRANCE_FALLBACK_RADIUS := 2.4
 
 @onready var shop_area: Area3D = $Area3D
 @onready var shop_label: Label3D = $Label3D
 @onready var player: CharacterBody3D = $Player3d
 var map_entrance: Area3D
+var mine_entrance: Area3D
 
 var shop_ui: CanvasLayer
 var inventory_ui: CanvasLayer
@@ -21,8 +23,7 @@ var map_transition_started := false
 
 func _ready() -> void:
 	map_entrance = get_node_or_null("MapEntrance") as Area3D
-	if not map_entrance:
-		map_entrance = get_node_or_null("MineEntrance") as Area3D
+	mine_entrance = get_node_or_null("MineEntrance") as Area3D
 
 	shop_ui = SHOP_UI_SCENE.instantiate() as CanvasLayer
 	add_child(shop_ui)
@@ -39,6 +40,9 @@ func _ready() -> void:
 	if map_entrance:
 		map_entrance.monitoring = true
 		map_entrance.body_entered.connect(_on_map_entrance_body_entered)
+	if mine_entrance:
+		mine_entrance.monitoring = true
+		mine_entrance.body_entered.connect(_on_mine_entrance_body_entered)
 	if shop_label:
 		shop_label.text = "Upgrade Shop\nPress E while inside area"
 	_sync_player_state_from_game_state()
@@ -48,12 +52,16 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	if map_transition_started:
 		return
-	if not map_entrance or not player:
+	if not player:
 		return
 
 	# Fallback for cases where Area3D signal wiring/collision setup is missing.
-	if player.global_position.distance_to(map_entrance.global_position) <= MAP_ENTRANCE_FALLBACK_RADIUS:
+	if map_entrance and player.global_position.distance_to(map_entrance.global_position) <= ENTRANCE_FALLBACK_RADIUS:
 		_go_to_world_map()
+		return
+
+	if mine_entrance and player.global_position.distance_to(mine_entrance.global_position) <= ENTRANCE_FALLBACK_RADIUS:
+		_go_to_cave_level()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -172,6 +180,12 @@ func _on_map_entrance_body_entered(body: Node3D) -> void:
 	_go_to_world_map()
 
 
+func _on_mine_entrance_body_entered(body: Node3D) -> void:
+	if body != player:
+		return
+	_go_to_cave_level()
+
+
 func _go_to_world_map() -> void:
 	if map_transition_started:
 		return
@@ -186,6 +200,22 @@ func _go_to_world_map() -> void:
 		get_node("/root/GameState").call("set_location", "world_map")
 
 	get_tree().change_scene_to_file(WORLD_MAP_SCENE)
+
+
+func _go_to_cave_level() -> void:
+	if map_transition_started:
+		return
+	map_transition_started = true
+
+	if shop_open:
+		_close_shop()
+
+	_sync_game_state_from_player()
+
+	if has_node("/root/GameState"):
+		get_node("/root/GameState").call("set_location", "cave_level")
+
+	get_tree().change_scene_to_file(CAVE_LEVEL_SCENE)
 
 
 func _sync_player_state_from_game_state() -> void:

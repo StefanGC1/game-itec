@@ -1,8 +1,15 @@
 extends CanvasLayer
 
 const ORE_SPRITESHEET := preload("res://assets/UIAssets/minereuriinventar.png")
+const GATHER_SPRITESHEET := preload("res://assets/UIAssets/ierburi.png")
 const COIN_ICON := preload("res://assets/UIAssets/coin.png")
 const SPRITESHEET_SLOT_COUNT := 7
+const GATHER_SLOT_COUNT := 2
+const GATHER_ORDER: Array[String] = ["wood", "herbs"]
+const GATHER_SPRITE_INDEX := {
+	"wood": 0,
+	"herbs": 1
+}
 const ORE_ORDER: Array[String] = ["adamantite", "diamond", "gold", "iron", "coal"]
 const ORE_SPRITE_INDEX := {
 	"adamantite": 0,
@@ -66,6 +73,8 @@ func _refresh_all_values() -> void:
 		return
 
 	_set_value("credits", int(game_state.get("credits")))
+	for item_id in GATHER_ORDER:
+		_set_value(item_id, int(game_state.call("get_inventory_amount", item_id)))
 	for ore_id in ORE_ORDER:
 		_set_value(ore_id, int(game_state.call("get_inventory_amount", ore_id)))
 
@@ -87,6 +96,8 @@ func _set_value(key: String, amount: int) -> void:
 
 func _build_rows() -> void:
 	_add_row("credits", "Money", COIN_ICON)
+	for item_id in GATHER_ORDER:
+		_add_row(item_id, _format_item_name(item_id), _build_gather_icon(item_id))
 	for ore_id in ORE_ORDER:
 		_add_row(ore_id, _format_item_name(ore_id), _build_ore_icon(ore_id))
 
@@ -135,6 +146,25 @@ func _build_ore_icon(ore_id: String) -> Texture2D:
 
 	var atlas := AtlasTexture.new()
 	atlas.atlas = ORE_SPRITESHEET
+	atlas.region = Rect2i(sprite_index * frame_width, 0, frame_width, frame_height)
+	return atlas
+
+
+func _build_gather_icon(item_id: String) -> Texture2D:
+	if GATHER_SPRITESHEET == null:
+		return null
+
+	var sprite_index := int(GATHER_SPRITE_INDEX.get(item_id, -1))
+	if sprite_index < 0:
+		return GATHER_SPRITESHEET
+
+	var frame_width := int(float(GATHER_SPRITESHEET.get_width()) / float(GATHER_SLOT_COUNT))
+	var frame_height := int(GATHER_SPRITESHEET.get_height())
+	if frame_width <= 0 or frame_height <= 0:
+		return GATHER_SPRITESHEET
+
+	var atlas := AtlasTexture.new()
+	atlas.atlas = GATHER_SPRITESHEET
 	atlas.region = Rect2i(sprite_index * frame_width, 0, frame_width, frame_height)
 	return atlas
 
