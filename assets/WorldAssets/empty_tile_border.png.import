@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://014j0i0iwauv"
-path.s3tc="res://.godot/imported/Tiling.png-8934fb89df0c2c4b04b5d3cbd0aa571f.s3tc.ctex"
+uid="uid://2hal0f56d6tu"
+path.s3tc="res://.godot/imported/empty_tile_border.png-d91c86485894a614371b586c23ddca81.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/WorldAssets/Tiling.png"
-dest_files=["res://.godot/imported/Tiling.png-8934fb89df0c2c4b04b5d3cbd0aa571f.s3tc.ctex"]
+source_file="res://assets/WorldAssets/empty_tile_border.png"
+dest_files=["res://.godot/imported/empty_tile_border.png-d91c86485894a614371b586c23ddca81.s3tc.ctex"]
 
 [params]
 

@@ -37,6 +37,11 @@ var _input_locked := false
 
 
 func _ready() -> void:
+	_animated_sprite.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
+	_animated_sprite.shaded = true
+	_animated_sprite.double_sided = true
+	_animated_sprite.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
+	_animated_sprite.alpha_scissor_threshold = 0.1
 	_connect_dialogue_signals()
 
 @onready var Walking_on_grass_sound = $AudioStreamPlayer_walking_grass
