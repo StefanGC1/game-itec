@@ -19,8 +19,13 @@ signal inventory_changed(item_id: String, new_amount: int)
 signal credits_changed(new_credits: int)
 signal trade_completed(village_id: String, item_id: String, quantity: int, is_buy: bool, credits_delta: int)
 
+var credits := 25:
+	set(value):
+		if credits != value:
+			credits = value
+			credits_changed.emit(credits)
+
 var location := "village"
-var credits := 25
 var global_inflation_index := 0.0
 
 var player_progress: Dictionary = {
@@ -158,6 +163,10 @@ func capture_player_state(player_node: Node) -> void:
 		return
 
 	credits = int(player_node.get("credits"))
+	var new_credits := int(player_node.get("credits"))
+	if new_credits != credits:
+		credits = new_credits
+		credits_changed.emit(credits)
 	if player_node.get("drill_level") != null:
 		player_progress["drill_level"] = int(player_node.get("drill_level"))
 	if player_node.get("mining_speed_level") != null:
@@ -201,11 +210,14 @@ func apply_inflation_to_upgrade_cost(base_cost: int) -> int:
 func add_inventory_item(item_id: String, quantity: int) -> Dictionary:
 	if quantity <= 0:
 		return {"success": false, "message": "Quantity must be greater than zero."}
-	if item_count + quantity > get_inventory_capacity():
-		return {"success": false, "message": "Cannot add items. Inventory capacity exceeded."}
 
-	inventory[item_id] = get_inventory_amount(item_id) + quantity
-	item_count += quantity
+	var remaining_capacity := get_inventory_capacity() - item_count
+	if remaining_capacity <= 0:
+		return {"success": false, "message": "Inventory is full."}
+
+	var actual_quantity := mini(quantity, remaining_capacity)
+	inventory[item_id] = get_inventory_amount(item_id) + actual_quantity
+	item_count += actual_quantity
 	inventory_changed.emit(item_id, int(inventory[item_id]))
 
 	if item_id == "adamantite" and int(inventory["adamantite"]) >= 50:
@@ -213,7 +225,7 @@ func add_inventory_item(item_id: String, quantity: int) -> Dictionary:
 
 	return {
 		"success": true,
-		"message": "Added " + str(quantity) + " " + item_id + " to inventory.",
+		"message": "Added " + str(actual_quantity) + " " + item_id + " to inventory.",
 		"item_id": item_id,
 		"new_amount": int(inventory[item_id])
 	}
@@ -225,9 +237,14 @@ func add_inventory_items(items: Dictionary) -> Dictionary:
 		var quantity := int(items[item_id])
 		if quantity <= 0:
 			continue
-		inventory[item_id] = get_inventory_amount(item_id) + quantity
+		var remaining_capacity := get_inventory_capacity() - item_count
+		if remaining_capacity <= 0:
+			break
+		var actual_quantity := mini(quantity, remaining_capacity)
+		inventory[item_id] = get_inventory_amount(item_id) + actual_quantity
+		item_count += actual_quantity
 		inventory_changed.emit(str(item_id), int(inventory[item_id]))
-		added_total += quantity
+		added_total += actual_quantity
 
 	return {
 		"success": true,
@@ -359,13 +376,10 @@ func gather_from_forest(area_name: String) -> Dictionary:
 			wood_gain = 4
 			herbs_gain = 1
 
-	inventory["wood"] = get_inventory_amount("wood") + wood_gain
-	inventory["herbs"] = get_inventory_amount("herbs") + herbs_gain
-	inventory_changed.emit("wood", int(inventory["wood"]))
-	inventory_changed.emit("herbs", int(inventory["herbs"]))
+	var result := add_inventory_items({"wood": wood_gain, "herbs": herbs_gain})
 	return {
 		"success": true,
-		"message": "Gathered " + str(wood_gain) + " wood and " + str(herbs_gain) + " herbs at " + area_name + "."
+		"message": "Gathered resources at " + area_name + ". " + result["message"]
 	}
 
 
