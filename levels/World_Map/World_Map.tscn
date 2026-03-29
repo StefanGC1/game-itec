@@ -1,24 +1,27 @@
 [gd_scene format=3 uid="uid://vq61hdbwhbhb"]
 
 [ext_resource type="Script" uid="uid://c2rgaurc7x0fh" path="res://levels/World_Map/map.gd" id="1_map_script"]
+[ext_resource type="Texture2D" uid="uid://cn570qmda5igf" path="res://levels/World_Map/harta.png" id="2_wohlo"]
 
 [node name="World_Map" type="Node2D" unique_id=1248121438]
 script = ExtResource("1_map_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=122822736]
+position = Vector2(946, 525)
+texture = ExtResource("2_wohlo")
 
 [node name="Village1" type="Button" parent="." unique_id=451912532]
-offset_left = 1454.0
-offset_top = 478.0
-offset_right = 1806.0
-offset_bottom = 1009.0
+offset_left = 1099.0
+offset_top = 528.0
+offset_right = 1451.0
+offset_bottom = 921.0
 size_flags_horizontal = 8
 
 [node name="HomeVillage" type="Button" parent="." unique_id=1038495822]
-offset_left = 789.0
-offset_top = 799.0
-offset_right = 1262.0
-offset_bottom = 1033.0
+offset_left = 1465.0
+offset_top = 382.0
+offset_right = 1853.0
+offset_bottom = 731.0
 size_flags_horizontal = 8
 
 [node name="Village2" type="Button" parent="." unique_id=1247290232]
@@ -29,38 +32,38 @@ offset_bottom = 371.0
 size_flags_horizontal = 8
 
 [node name="Village3" type="Button" parent="." unique_id=1655616736]
-offset_left = 158.0
-offset_top = 561.0
-offset_right = 520.0
-offset_bottom = 1009.0
+offset_left = 93.0
+offset_top = 569.0
+offset_right = 483.0
+offset_bottom = 1008.0
 size_flags_horizontal = 8
 
 [node name="Village4" type="Button" parent="." unique_id=1926903530]
 offset_left = 183.0
-offset_top = 76.0
-offset_right = 678.0
-offset_bottom = 473.0
+offset_top = 106.0
+offset_right = 417.0
+offset_bottom = 438.0
 size_flags_horizontal = 8
 
 [node name="Village5" type="Button" parent="." unique_id=1203367854]
-offset_left = 804.0
-offset_top = 61.0
-offset_right = 1270.0
-offset_bottom = 330.0
+offset_left = 832.0
+offset_top = 441.0
+offset_right = 992.0
+offset_bottom = 797.0
 size_flags_horizontal = 8
 
 [node name="Butterfly Grove North" type="Button" parent="." unique_id=1671468682]
-offset_left = 757.0
-offset_top = 373.0
-offset_right = 1386.0
-offset_bottom = 732.0
+offset_left = 1010.0
+offset_top = 3.0
+offset_right = 1402.0
+offset_bottom = 504.0
 size_flags_horizontal = 8
 
 [node name="Butterfly Grove West" type="Button" parent="." unique_id=920131946]
-offset_left = 556.0
-offset_top = 510.0
-offset_right = 730.0
-offset_bottom = 1009.0
+offset_left = 437.0
+offset_top = 330.0
+offset_right = 827.0
+offset_bottom = 675.0
 size_flags_horizontal = 8
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1690549276]
