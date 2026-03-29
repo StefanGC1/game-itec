@@ -13,7 +13,8 @@ config_version=5
 config/name="game-itec"
 run/main_scene="uid://b3xp6jhnerwlo"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+boot_splash/image="uid://s2e7tkxdoha3"
+config/icon="uid://bc4o2hn4htl68"
 
 [autoload]
 
