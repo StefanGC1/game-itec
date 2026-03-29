@@ -31,8 +31,19 @@ const ACTION_BACKWARD := "3d_backward"
 @export var fuel_capacity_per_level := 20.0
 @export var inventory_capacity_per_level := 2
 
+var _input_locked := false
+
+
+func _ready() -> void:
+	_connect_dialogue_signals()
+
 
 func _physics_process(_delta: float) -> void:
+	if _input_locked:
+		velocity = Vector3.ZERO
+		move_and_slide()
+		return
+
 	# Simple 4-direction movement: left/right on X, up/down on Z.
 	var horizontal := Input.get_action_strength(ACTION_RIGHT) - Input.get_action_strength(ACTION_LEFT)
 	var vertical := Input.get_action_strength(ACTION_BACKWARD) - Input.get_action_strength(ACTION_FORWARD)
@@ -180,3 +191,23 @@ func _get_next_upgrade_cost(upgrade_type: String) -> int:
 			return _apply_upgrade_inflation(int(INVENTORY_UPGRADE_COSTS[inventory_capacity_level]))
 		_:
 			return -1
+
+
+func _connect_dialogue_signals() -> void:
+	if not has_node("/root/DialogueManager"):
+		return
+
+	var dialogue_manager := get_node("/root/DialogueManager")
+	if not dialogue_manager.dialogue_started.is_connected(_on_dialogue_started):
+		dialogue_manager.dialogue_started.connect(_on_dialogue_started)
+	if not dialogue_manager.dialogue_ended.is_connected(_on_dialogue_ended):
+		dialogue_manager.dialogue_ended.connect(_on_dialogue_ended)
+
+
+func _on_dialogue_started(_resource: Resource) -> void:
+	_input_locked = true
+	velocity = Vector3.ZERO
+
+
+func _on_dialogue_ended(_resource: Resource) -> void:
+	_input_locked = false

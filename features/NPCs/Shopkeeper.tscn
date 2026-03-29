@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://dol7lt3rjun44"]
+
+[ext_resource type="Texture2D" uid="uid://bpcmq5h1cx6jw" path="res://features/NPCs/NPCSpritesheets/gigi.png" id="1_udouc"]
+[ext_resource type="Script" path="res://features/NPCs/npc_dialogue_3d.gd" id="2_dlg3d"]
+[ext_resource type="Resource" uid="uid://blnq8omv4f66" path="res://levels/Npc_test_dialogue/Dialogs/Shopkeeper_dialogue.dialogue" id="3_shopdlg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wuwmd"]
+atlas = ExtResource("1_udouc")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3is3m"]
+atlas = ExtResource("1_udouc")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w1tgf"]
+atlas = ExtResource("1_udouc")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1uuw7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wuwmd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3is3m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w1tgf")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_shopkeeper"]
+radius = 2.2
+
+[node name="Shopkeeper" type="Node3D" unique_id=2031936937]
+script = ExtResource("2_dlg3d")
+dialogue_resource = ExtResource("3_shopdlg")
+dialogue_start = "interaction_1"
+prompt_text = "[ T ] Talk"
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=136199677]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, 0)
+shaded = true
+texture_filter = 0
+billboard = 1
+pixel_size = 0.025
+double_sided = false
+sprite_frames = SubResource("SpriteFrames_1uuw7")
+animation = &"idle"
+autoplay = "idle"
+playing = true
+
+[node name="InteractionArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea"]
+shape = SubResource("SphereShape3D_shopkeeper")
+
+[node name="InteractionPrompt" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.35, 0)
+billboard = 1
+font_size = 32
+modulate = Color(0.96, 0.98, 1, 1)
+outline_modulate = Color(0, 0, 0, 1)
+outline_size = 6
+text = "[ T ] Talk"
+frame_progress = 0.6783471
