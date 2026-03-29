@@ -2,9 +2,10 @@
 
 [ext_resource type="Script" uid="uid://c2rgaurc7x0fh" path="res://levels/World_Map/map.gd" id="1_map_script"]
 [ext_resource type="Texture2D" uid="uid://cn570qmda5igf" path="res://levels/World_Map/harta.png" id="2_wohlo"]
+[ext_resource type="AudioStream" uid="uid://bk23adm4ktvfm" path="res://levels/Npc_test_dialogue/Sounds/0_794__The Most Relaxing Waves Ever - Ocean Sounds to Sleep, Study and Chill.mp3" id="2_wohlo"]
+
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_48w1r"]
 load_path = "res://.godot/imported/harta.png-eba0096b618dbc00ffa8841b56db7d81.ctex"
-[ext_resource type="AudioStream" uid="uid://bk23adm4ktvfm" path="res://levels/Npc_test_dialogue/Sounds/0_794__The Most Relaxing Waves Ever - Ocean Sounds to Sleep, Study and Chill.mp3" id="2_wohlo"]
 
 [node name="World_Map" type="Node2D" unique_id=1248121438]
 script = ExtResource("1_map_script")
