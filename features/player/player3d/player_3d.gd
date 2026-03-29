@@ -30,7 +30,7 @@ const ACTION_BACKWARD := "3d_backward"
 @export var mining_speed_per_level := 0.2
 @export var fuel_capacity_per_level := 20.0
 @export var inventory_capacity_per_level := 2
-
+@onready var Walking_on_grass_sound = $AudioStreamPlayer_walking_grass
 
 func _physics_process(_delta: float) -> void:
 	# Simple 4-direction movement: left/right on X, up/down on Z.
@@ -43,9 +43,16 @@ func _physics_process(_delta: float) -> void:
 	velocity.x = direction.x * SPEED
 	velocity.y = 0.0
 	velocity.z = direction.z * SPEED
+	
+	 
 
 	move_and_slide()
-
+	
+	if get_real_velocity().length() > 0.1:
+		if not Walking_on_grass_sound.playing:
+			Walking_on_grass_sound.play()
+	else:
+		Walking_on_grass_sound.stop()
 
 func can_mine_tier(required_drill_level: int) -> bool:
 	return drill_level >= required_drill_level
