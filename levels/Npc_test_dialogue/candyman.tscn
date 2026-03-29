@@ -53,13 +53,16 @@ bus = &"SFX"
 [node name="AudioStreamPlayer_jumping" type="AudioStreamPlayer2D" parent="." unique_id=380616373]
 stream = ExtResource("4_rog4w")
 volume_db = 6.577
+bus = &"SFX"
 
 [node name="AudioStreamPlayer_landing_brick" type="AudioStreamPlayer2D" parent="." unique_id=1453657963]
 stream = ExtResource("5_t8xyc")
 volume_db = 9.52
+bus = &"SFX"
 
 [node name="AudioStreamPlayer_landing_grass" type="AudioStreamPlayer2D" parent="." unique_id=1850615768]
 stream = ExtResource("6_xrs7n")
+bus = &"SFX"
 
 [node name="Coin_hud" parent="." unique_id=1075163448 instance=ExtResource("7_rog4w")]
 

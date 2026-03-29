@@ -1,0 +1,187 @@
+[gd_scene format=3 uid="uid://fl3koils48b"]
+
+[ext_resource type="Script" uid="uid://cg0pu8l3j16p0" path="res://levels/Npc_test_dialogue/MainMenu/options_menu.gd" id="1_cpbqo"]
+[ext_resource type="Script" uid="uid://sjprid6hgk0x" path="res://levels/Npc_test_dialogue/MainMenu/h_slider.gd" id="1_xjxk4"]
+[ext_resource type="Texture2D" uid="uid://bkxa6yb0nr2br" path="res://levels/Npc_test_dialogue/MainMenu/bridge.png" id="2_ajjgu"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cpbqo"]
+texture = ExtResource("2_ajjgu")
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_wol1c"]
+thickness = 8
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_snt05"]
+color = Color(0.36862746, 0.60784316, 0.22745098, 1)
+thickness = 8
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_ajjgu"]
+thickness = 8
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_qa0jc"]
+color = Color(0.36862746, 0.60784316, 0.22745098, 1)
+thickness = 8
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_5xvbd"]
+color = Color(0.05109611, 0.05109611, 0.051096104, 1)
+thickness = 8
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_xna71"]
+color = Color(0.3683883, 0.6067201, 0.22560424, 1)
+thickness = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v8j3r"]
+bg_color = Color(0.82889193, 0.4950636, 0.44916785, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[node name="Options_menu" type="Control" unique_id=250242351]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cpbqo")
+
+[node name="Panel" type="Panel" parent="." unique_id=98717019]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_cpbqo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=747615369]
+layout_mode = 0
+offset_left = 470.0
+offset_top = 282.0
+offset_right = 1280.0
+offset_bottom = 1062.0
+theme_override_constants/separation = 50
+
+[node name="SFX" type="HSlider" parent="VBoxContainer" unique_id=739252405]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+theme_override_styles/slider = SubResource("StyleBoxLine_wol1c")
+theme_override_styles/grabber_area = SubResource("StyleBoxLine_snt05")
+max_value = 1.0
+step = 0.001
+value = 1.0
+script = ExtResource("1_xjxk4")
+bus_name = "SFX"
+
+[node name="sfx_label" type="Label" parent="VBoxContainer/SFX" unique_id=640278603]
+layout_mode = 0
+offset_left = -4.0
+offset_top = -95.0
+offset_right = 806.0
+offset_bottom = -50.0
+theme_override_colors/font_color = Color(0.93333334, 0, 0.92941177, 1)
+theme_override_font_sizes/font_size = 64
+text = "SFX Volume"
+
+[node name="Music" type="HSlider" parent="VBoxContainer" unique_id=567011925]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+theme_override_styles/slider = SubResource("StyleBoxLine_ajjgu")
+theme_override_styles/grabber_area = SubResource("StyleBoxLine_qa0jc")
+max_value = 1.0
+step = 0.001
+value = 1.0
+script = ExtResource("1_xjxk4")
+bus_name = "Music"
+
+[node name="music_label" type="Label" parent="VBoxContainer/Music" unique_id=1420116209]
+layout_mode = 0
+offset_left = 11.0
+offset_top = -100.0
+offset_right = 821.0
+offset_bottom = -12.0
+theme_override_colors/font_color = Color(0.93524414, 0.0006878847, 0.9311559, 1)
+theme_override_font_sizes/font_size = 64
+text = "Music Volume"
+
+[node name="Master" type="HSlider" parent="VBoxContainer" unique_id=1371191519]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+theme_override_styles/slider = SubResource("StyleBoxLine_5xvbd")
+theme_override_styles/grabber_area = SubResource("StyleBoxLine_xna71")
+max_value = 1.0
+step = 0.001
+value = 1.0
+script = ExtResource("1_xjxk4")
+bus_name = "Master"
+
+[node name="master_label" type="Label" parent="VBoxContainer/Master" unique_id=1706622757]
+layout_mode = 0
+offset_left = 6.0
+offset_top = -99.0
+offset_right = 570.0
+offset_bottom = -11.0
+theme_override_colors/font_color = Color(0.93333334, 0, 0.92941177, 1)
+theme_override_font_sizes/font_size = 64
+text = "Master Volume"
+
+[node name="Label" type="Label" parent="." unique_id=1192057809]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -286.0
+offset_top = -3.0
+offset_right = 203.0
+offset_bottom = 172.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.72156864, 1, 1)
+theme_override_font_sizes/font_size = 128
+text = "Options"
+
+[node name="Back_button" type="Button" parent="." unique_id=1716508575]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 53.0
+offset_top = -235.0
+offset_right = 373.0
+offset_bottom = -60.0
+grow_vertical = 0
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.9275587, 0.823002, 0.5111377, 1)
+theme_override_font_sizes/font_size = 64
+theme_override_styles/normal = SubResource("StyleBoxFlat_v8j3r")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_v8j3r")
+theme_override_styles/hover = SubResource("StyleBoxFlat_v8j3r")
+text = "Back"
+
+[node name="Quit_button" type="Button" parent="." unique_id=1597517238]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -422.0
+offset_top = -221.0
+offset_right = -102.0
+offset_bottom = -46.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.9275587, 0.823002, 0.5111377, 1)
+theme_override_font_sizes/font_size = 64
+theme_override_styles/normal = SubResource("StyleBoxFlat_v8j3r")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_v8j3r")
+theme_override_styles/hover = SubResource("StyleBoxFlat_v8j3r")
+text = "Quit
+
+"
+
+[connection signal="value_changed" from="VBoxContainer/SFX" to="VBoxContainer/SFX" method="_on_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/Music" to="VBoxContainer/Music" method="_on_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/Master" to="VBoxContainer/Master" method="_on_value_changed"]
+[connection signal="pressed" from="Back_button" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="Quit_button" to="." method="_on_quit_button_pressed"]

@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dkltuse7rhdcd"]
+
+[ext_resource type="AudioStream" uid="uid://cwxml7aob13pd" path="res://levels/Npc_test_dialogue/Sounds/Euphoria_ZODIAC_Ultimate_Beat_Contest_KLICKAUD.mp3" id="1_xdbhw"]
+
+[node name="MusicController" type="Node" unique_id=1106541870]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=325512219]
+stream = ExtResource("1_xdbhw")
+autoplay = true
+bus = &"Music"
