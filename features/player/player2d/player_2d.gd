@@ -46,6 +46,7 @@ var jump_buffer_active: bool = false
 var landing_lock_active: bool = false
 var was_on_floor: bool = false
 var facing_direction: int = 1
+var _input_locked: bool = false
 
 signal switch_layer(direction: int, player_position: Vector2)
 signal preview_layers(isActive: bool)
@@ -56,6 +57,7 @@ func _ready() -> void:
 	jump_buffer_timer = _create_one_shot_timer(jump_buffer_time, _on_jump_buffer_timer_timeout)
 	landing_timer = _create_one_shot_timer(landing_state_duration, _on_landing_timer_timeout)
 	was_on_floor = is_on_floor()
+	_connect_dialogue_signals()
 
 	animated_sprite.play("idle")
 
@@ -69,6 +71,14 @@ func _create_one_shot_timer(wait_time: float, on_timeout: Callable) -> Timer:
 	return timer
 
 func _physics_process(delta: float) -> void:
+	if _input_locked:
+		velocity = Vector2.ZERO
+		_set_state(PlayerState.IDLE)
+		_update_animation(false)
+		move_and_slide()
+		was_on_floor = is_on_floor()
+		return
+
 	var on_floor_before := is_on_floor()
 	var direction := Input.get_axis("2d_left", "2d_right")
 	var mining_active := _is_mining_input_active()
@@ -160,6 +170,8 @@ func _apply_mining_lock(delta: float) -> void:
 	velocity.x = move_toward(velocity.x, 0.0, ground_decel * delta)
 
 func _is_mining_input_active() -> bool:
+	if _input_locked:
+		return false
 	# TODO: Use input map with input action
 	return Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
 
@@ -291,6 +303,9 @@ func _on_landing_timer_timeout() -> void:
 # ================= EXPLICIT INPUT HANDLING =================
 
 func _input(event: InputEvent) -> void:
+	if _input_locked:
+		return
+
 	if event.is_action_pressed("2d_layer_forward"):
 		_try_switch_layer(1)
 	elif event.is_action_pressed("2d_layer_backward"):
@@ -313,3 +328,31 @@ func _try_switch_layer(direction: int) -> void:
 
 func _on_layer_switch_cooldown_timeout() -> void:
 	can_switch_layer = true
+
+
+func _connect_dialogue_signals() -> void:
+	if not has_node("/root/DialogueManager"):
+		return
+
+	var dialogue_manager := get_node("/root/DialogueManager")
+	if not dialogue_manager.dialogue_started.is_connected(_on_dialogue_started):
+		dialogue_manager.dialogue_started.connect(_on_dialogue_started)
+	if not dialogue_manager.dialogue_ended.is_connected(_on_dialogue_ended):
+		dialogue_manager.dialogue_ended.connect(_on_dialogue_ended)
+
+
+func _on_dialogue_started(_resource: Resource) -> void:
+	_input_locked = true
+	velocity = Vector2.ZERO
+	jump_buffer_active = false
+	coyote_window_active = false
+	landing_lock_active = false
+	if not jump_buffer_timer.is_stopped():
+		jump_buffer_timer.stop()
+	if not coyote_timer.is_stopped():
+		coyote_timer.stop()
+	emit_signal("preview_layers", false)
+
+
+func _on_dialogue_ended(_resource: Resource) -> void:
+	_input_locked = false

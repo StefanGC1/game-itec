@@ -61,6 +61,8 @@ func go_to(target: Location, context: Dictionary = {}) -> void:
 	# Wait one frame for the new scene tree to be ready.
 	await get_tree().process_frame
 
+	RenderingServer.force_draw()
+
 	var fade_in := create_tween()
 	fade_in.tween_property(_fade_rect, "color:a", 0.0, FADE_DURATION)
 	await fade_in.finished

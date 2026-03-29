@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://c7di7c7evrrdk"
+path="res://.godot/imported/Shopkeeper_dialogue.dialogue-1a868788d5d447e1dd0db6a9d37bf5db.tres"
+
+[deps]
+
+source_file="res://levels/Npc_test_dialogue/Dialogs/Shopkeeper_dialogue.dialogue"
+dest_files=["res://.godot/imported/Shopkeeper_dialogue.dialogue-1a868788d5d447e1dd0db6a9d37bf5db.tres"]
+
+[params]
+
+defaults=true

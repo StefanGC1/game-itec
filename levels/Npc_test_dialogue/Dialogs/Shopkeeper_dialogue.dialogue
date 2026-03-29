@@ -1,0 +1,24 @@
+~ interaction_1
+Shopkeeper: What's up my auto-pal, did you mine more ore or sum?
+MATE: I'm working on it.
+Shopkeeper: Go sell your stuff when you got the ore. My money printe... I mean my hard worked cash should suffice for your hard work.
+=> END
+
+~ interaction_2
+Shopkeeper: Got any news?
+MATE: No, but I always wondered where you live, as far as I know your kind needs a place to sleep, a home.
+Shopkeeper: In the house down this path to the east, duhh, where else, we live in the only village where the population isssss... ME, I'm the only citizen of this village the guy over there doesn't live here. If you ask me, it's probably because the land lacks fertility, but we got crazy rich ground below us, so I'll be fine. As long as you bring me more ore of course.
+=> END
+
+~ interaction_3
+Shopkeeper: Stop pissing me off MATE, get working.
+MATE: I'm sorry chief.
+Shopkeeper: Remember, I paid for you.
+=> END
+
+~ interaction_4
+Shopkeeper: What?
+MATE: How come you're so obsessed with me mining ore, even though you don't recieve it?
+Shopkeeper: I got my ways to benefit.
+- Leave
+    => interaction_4

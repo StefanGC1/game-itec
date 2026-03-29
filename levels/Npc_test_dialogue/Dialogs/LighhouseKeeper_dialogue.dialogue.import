@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://dm8fnbofjkxeh"
+path="res://.godot/imported/LighhouseKeeper_dialogue.dialogue-228c067d3f03a67baed907cd982af977.tres"
+
+[deps]
+
+source_file="res://levels/Npc_test_dialogue/Dialogs/LighhouseKeeper_dialogue.dialogue"
+dest_files=["res://.godot/imported/LighhouseKeeper_dialogue.dialogue-228c067d3f03a67baed907cd982af977.tres"]
+
+[params]
+
+defaults=true

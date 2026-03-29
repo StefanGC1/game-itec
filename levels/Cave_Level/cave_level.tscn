@@ -4,9 +4,11 @@
 [ext_resource type="Script" uid="uid://cj3hqev1db7hh" path="res://levels/Cave_Level/cave_level.gd" id="1_1680j"]
 [ext_resource type="TileSet" uid="uid://cl8s7sy1yg1fa" path="res://shared/cave_tileset/cave_tileset.tres" id="1_8053v"]
 [ext_resource type="PackedScene" uid="uid://ci6n83k74ykvr" path="res://features/player/player2d/player2d.tscn" id="2_xde8t"]
-[ext_resource type="Script" uid="uid://bmpmqdnt1umb0" path="res://features/cave/cave_generator/cave_rock_entry.gd" id="3_mb7q1"]
+[ext_resource type="Script" path="res://features/cave/cave_generator/cave_rock_entry.gd" id="3_mb7q1"]
 [ext_resource type="PackedScene" uid="uid://bpmj14aficryf" path="res://features/z_layer_manager/z_layer_manager.tscn" id="3_xde8t"]
 [ext_resource type="Script" uid="uid://c8wjq23hanmux" path="res://features/cave/cave_generator/cave_ore_entry.gd" id="5_ppwmx"]
+[ext_resource type="PackedScene" uid="uid://bsm7dfpcs6d3p" path="res://features/NPCs/DialogueSign.tscn" id="8_gwdoe"]
+[ext_resource type="Resource" uid="uid://y0gejhxljj44" path="res://levels/Npc_test_dialogue/Dialogs/Vincent_dialogue.dialogue" id="9_vincent"]
 
 [sub_resource type="Resource" id="Resource_1680j"]
 script = ExtResource("3_mb7q1")
@@ -114,3 +116,9 @@ preview_opacity = 0.2
 preview_vertical_offset = 10.0
 preview_next_tint = Color(0.77254903, 0, 0.19215687, 1)
 preview_previous_tint = Color(0, 0.67058825, 0.13725491, 1)
+
+[node name="DialogueSign" parent="." unique_id=1950380412 instance=ExtResource("8_gwdoe")]
+Area2D/dialogue_resource = ExtResource("9_vincent")
+Area2D/dialogue_start = "Vincent_Dialogue"
+position = Vector2(58.000004, 487)
+scale = Vector2(1.7306483, 1.8381741)

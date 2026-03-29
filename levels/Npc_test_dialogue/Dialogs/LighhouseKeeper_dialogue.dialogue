@@ -1,0 +1,31 @@
+~ interaction_1
+???: ...
+MATE: What's with your "attire"?
+Lighthouse Keeper: I'm the lighthouse keeper of the isle.
+MATE: Isle?
+Lighthouse Keeper: You're simply an automaton, I wouldn't expect you to know about anything related to this world, you exist simply for doing hard labour, I see no beauty in a living creature born with a higher level of understanding that uses it for nothing.
+MATE: why so hateful?
+Lighthouse Keeper: Scram!
+=> END
+
+~ interaction_2
+Lighthouse Keeper: You're back?
+MATE: You seem interesting.
+Lighthouse Keeper: I was kind of harsh earlier, in fact now that I think about it, your question wasn't so out of place, we live in Butterfly Grove as you probably already know, when I told you "I'm the lighthouse keeper of the isle" what I truly meant is that I'm the lighthouse keeper of the nearby island, the one located south-west of Butterfly Grove, and yes Butterfly Grove is truly just the name of this main island.
+MATE: Damm...
+=> END
+
+~ interaction_3
+Lighthouse Keeper: Back Again?
+MATE: Tell me more about this world.
+Lighthouse Keeper: I guess I was wrong about the beauty thing... you truly are a thing of beauty. Wanna know why I had such a bad opinion of your kind?
+MATE: Tell me.
+Lighthouse Keeper: You're automatons, you're only meaning was to replace the working class, they worked their asses off just to get replaced by things made of stone and sorcery, old sorcery, it's all a scheme so the higher ups, like the guy you work for, get monopoly over this small community, why do you think there are so few of us left? or the houses so tiny and rare? They valued money over people they're slowly creating a world of money, this ain't our world anymore, the "despots" sold houses for raw material to trade between villages, the people have no power. Many of us left, by boat.
+MATE: I'm sorry...
+Lighthouse Keeper: You're not like the other automatons, you seem more... curious, maybe you can change something.
+=> END
+
+~ interaction_4
+Lighthouse Keeper: You're still here? Go change something.
+- Leave
+    => interaction_4

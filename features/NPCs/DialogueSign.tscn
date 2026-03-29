@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://bsm7dfpcs6d3p"]
+
+[ext_resource type="Script" uid="uid://j5erxo508h55" path="res://features/NPCs/dialogue_sign.gd" id="1_7vgev"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hjdvw"]
+load_path = "res://.godot/imported/semn.png-9078fe5132e7cce01fa5ee0b92b11571.ctex"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hjdvw"]
+radius = 23.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0u6n0"]
+bg_color = Color(0.0588235, 0.0745098, 0.12549, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.52549, 0.901961, 1, 0.95)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="LabelSettings" id="LabelSettings_iwthx"]
+font_size = 17
+font_color = Color(0.980392, 0.988235, 1, 1)
+outline_size = 4
+outline_color = Color(0, 0, 0, 0.85)
+
+[node name="DialogueSign" type="Node2D" unique_id=1950380412]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=968313130]
+texture = SubResource("CompressedTexture2D_hjdvw")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=130589695]
+script = ExtResource("1_7vgev")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1881265881]
+position = Vector2(0, -5)
+shape = SubResource("CircleShape2D_hjdvw")
+
+[node name="Prompt" type="Panel" parent="Area2D" unique_id=2028960080]
+visible = false
+offset_left = -74.0
+offset_top = -89.0
+offset_right = 74.0
+offset_bottom = -51.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_0u6n0")
+
+[node name="Label" type="Label" parent="Area2D/Prompt" unique_id=1657869785]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/line_spacing = 2
+label_settings = SubResource("LabelSettings_iwthx")
+horizontal_alignment = 1
+vertical_alignment = 1
+text = "[ T ] Read sign"
+
+[connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered"]
+[connection signal="body_exited" from="Area2D" to="Area2D" method="_on_body_exited"]
