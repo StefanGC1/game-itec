@@ -1,0 +1,99 @@
+[gd_scene format=3 uid="uid://b3xp6jhnerwlo"]
+
+[ext_resource type="Script" uid="uid://bm3txl38bg6h6" path="res://levels/Npc_test_dialogue/MainMenu/main_menu.gd" id="1_4ioha"]
+[ext_resource type="Texture2D" uid="uid://bkxa6yb0nr2br" path="res://levels/Npc_test_dialogue/MainMenu/bridge.png" id="2_hbbyp"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4ioha"]
+texture = ExtResource("2_hbbyp")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d3mr6"]
+bg_color = Color(0.82889193, 0.4950636, 0.44916785, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[node name="MainMenu" type="Control" unique_id=419602906]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4ioha")
+
+[node name="Panel" type="Panel" parent="." unique_id=1137592084]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_4ioha")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1866416783]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -325.5
+offset_top = -279.0
+offset_right = 325.5
+offset_bottom = 385.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 30
+
+[node name="StartGame_Button" type="Button" parent="VBoxContainer" unique_id=1519211768]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.9275587, 0.823002, 0.5111377, 1)
+theme_override_font_sizes/font_size = 64
+theme_override_styles/normal = SubResource("StyleBoxFlat_d3mr6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_d3mr6")
+theme_override_styles/hover = SubResource("StyleBoxFlat_d3mr6")
+text = "Play"
+
+[node name="OptionsGame_Button" type="Button" parent="VBoxContainer" unique_id=462094572]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.9275587, 0.823002, 0.5111377, 1)
+theme_override_font_sizes/font_size = 64
+theme_override_styles/normal = SubResource("StyleBoxFlat_d3mr6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_d3mr6")
+theme_override_styles/hover = SubResource("StyleBoxFlat_d3mr6")
+text = "Options"
+
+[node name="QuitGame_Button" type="Button" parent="VBoxContainer" unique_id=1386147378]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.9275587, 0.823002, 0.5111377, 1)
+theme_override_font_sizes/font_size = 64
+theme_override_styles/normal = SubResource("StyleBoxFlat_d3mr6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_d3mr6")
+theme_override_styles/hover = SubResource("StyleBoxFlat_d3mr6")
+text = "Quit
+"
+
+[node name="Label" type="Label" parent="." unique_id=1122210242]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -289.0
+offset_top = 33.0
+offset_right = 258.0
+offset_bottom = 187.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.72156864, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.24126896, 0.13923031, 0.11010169, 0)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_y = 0
+theme_override_font_sizes/font_size = 128
+text = "Butterfly grove"
+
+[connection signal="pressed" from="VBoxContainer/StartGame_Button" to="." method="_on_start_game_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/OptionsGame_Button" to="." method="_on_optionst_game_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/QuitGame_Button" to="." method="_on_quit_game_button_pressed"]
