@@ -1,6 +1,70 @@
 [gd_scene format=3 uid="uid://eobprcx4rt8v"]
 
 [ext_resource type="Script" uid="uid://bj86uje56vngc" path="res://features/player/player3d/player_3d.gd" id="1_wa86y"]
+[ext_resource type="Texture2D" uid="uid://cs5wbce63t5ef" path="res://assets/Spritesheets/miningguy_animations_final.png" id="2_oidhx"]
+[ext_resource type="AudioStream" uid="uid://bd36146j7m732" path="res://levels/Npc_test_dialogue/Sounds/Footstep_grass.mp3" id="3_08cat"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_08cat"]
+atlas = ExtResource("2_oidhx")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e3moe"]
+atlas = ExtResource("2_oidhx")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kgrxj"]
+atlas = ExtResource("2_oidhx")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vct0l"]
+atlas = ExtResource("2_oidhx")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y0qvu"]
+atlas = ExtResource("2_oidhx")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7hoaj"]
+atlas = ExtResource("2_oidhx")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bs64s"]
+atlas = ExtResource("2_oidhx")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vct0l"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_08cat")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e3moe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kgrxj")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vct0l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y0qvu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7hoaj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bs64s")
+}],
+"loop": true,
+"name": &"Walking",
+"speed": 5.0
+}]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_wa86y"]
 
@@ -8,9 +72,17 @@
 script = ExtResource("1_wa86y")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=1930982315]
+sprite_frames = SubResource("SpriteFrames_vct0l")
+animation = &"Walking"
+frame_progress = 0.3258588
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=627301171]
 shape = SubResource("CapsuleShape3D_wa86y")
 
 [node name="Camera3D" type="Camera3D" parent="CollisionShape3D" unique_id=1748118759]
 transform = Transform3D(1, 0, 0, 0, 0.9105683, 0.41335872, 0, -0.41335872, 0.9105683, 0, 1.8288399, 3.0595422)
+
+[node name="AudioStreamPlayer_walking_grass" type="AudioStreamPlayer2D" parent="." unique_id=392568175]
+stream = ExtResource("3_08cat")
+volume_db = 20.0
+pitch_scale = 2.0

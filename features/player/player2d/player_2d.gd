@@ -1,6 +1,11 @@
 extends CharacterBody2D
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var mining_box: Area2D = $MiningBox
+@onready var dig_charge_bar: ProgressBar = $Dig_Charge_Up
+@onready var audio_walking_brick = $AudioStreamPlayer_walk
+@onready var audio_jumping = $AudioStreamPlayer_jump
+@onready var audio_landing = $AudioStreamPlayer_land_brick
 
 const FLOOR_EPSILON := 0.01
 
@@ -14,6 +19,9 @@ enum PlayerState {
 }
 
 @onready var foot_pos_marker = $FootPosition
+
+@export_group("Cave State")
+@export var cave_state: CaveState
 
 @export_group("Movement")
 @export var max_speed: float = 320.0
@@ -34,6 +42,11 @@ enum PlayerState {
 @export var landing_state_duration: float = 0.05
 
 @export var layer_switch_cooldown_seconds: float = 0.25
+@export_group("Mining")
+@export var mine_charge_time: float = 0.35
+var mine_charge_progress: float = 0.0
+var mine_target_pos: Vector2 = Vector2.ZERO
+var z_layer_manager: ZLayerManager = null
 var can_switch_layer: bool = true
 var layer_switch_cooldown_timer: Timer
 var coyote_timer: Timer
@@ -47,9 +60,10 @@ var landing_lock_active: bool = false
 var was_on_floor: bool = false
 var facing_direction: int = 1
 var _input_locked: bool = false
-
+var  was_in_air:bool = false
 signal switch_layer(direction: int, player_position: Vector2)
 signal preview_layers(isActive: bool)
+signal mine_tile(target_global_position: Vector2)
 
 func _ready() -> void:
 	layer_switch_cooldown_timer = _create_one_shot_timer(layer_switch_cooldown_seconds, _on_layer_switch_cooldown_timeout)
@@ -78,6 +92,11 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		was_on_floor = is_on_floor()
 		return
+		
+	if get_real_velocity() != Vector2.ZERO and is_on_floor():
+		if not audio_walking_brick.playing:
+			audio_walking_brick.play()
+	else: audio_walking_brick.stop()
 
 	var on_floor_before := is_on_floor()
 	var direction := Input.get_axis("2d_left", "2d_right")
@@ -94,6 +113,7 @@ func _physics_process(delta: float) -> void:
 		_set_state(PlayerState.MINING)
 		_apply_mining_lock(delta)
 	else:
+		_reset_mine_charge()
 		_handle_horizontal_movement(direction, on_floor_before, delta)
 
 	_apply_gravity(delta, on_floor_before)
@@ -104,6 +124,15 @@ func _physics_process(delta: float) -> void:
 	_update_state_after_move(direction)
 	_update_animation(mining_active)
 	was_on_floor = on_floor_after
+
+	if mining_active:
+		_try_emit_mine()
+		
+	if not was_in_air and not is_on_floor():
+		was_in_air = true
+	if was_in_air and is_on_floor():
+		was_in_air = false
+		audio_landing.play()
 
 
 func _update_coyote_window(on_floor_previous_frame: bool, on_floor_after_move: bool) -> void:
@@ -175,6 +204,45 @@ func _is_mining_input_active() -> bool:
 	# TODO: Use input map with input action
 	return Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
 
+func _is_mouse_in_mining_range() -> bool:
+	var mouse_pos := get_global_mouse_position()
+	var shape: CollisionShape2D = mining_box.get_child(0) as CollisionShape2D
+	var circle: CircleShape2D = shape.shape as CircleShape2D
+	return mining_box.global_position.distance_to(mouse_pos) <= circle.radius
+
+func _try_emit_mine() -> void:
+	var mouse_pos := get_global_mouse_position()
+	if not _is_mouse_in_mining_range():
+		_reset_mine_charge()
+		return
+	if z_layer_manager and not z_layer_manager.is_mineable_at(mouse_pos):
+		_reset_mine_charge()
+		return
+
+	var charge_time := mine_charge_time
+	if cave_state:
+		charge_time = cave_state.mining_speed_effective
+
+	mine_target_pos = mouse_pos
+	mine_charge_progress += get_physics_process_delta_time()
+	dig_charge_bar.visible = true
+	dig_charge_bar.max_value = charge_time
+	dig_charge_bar.value = mine_charge_progress
+	_position_charge_bar_at_mouse()
+
+	if mine_charge_progress >= charge_time:
+		mine_tile.emit(mine_target_pos)
+		_reset_mine_charge()
+
+func _reset_mine_charge() -> void:
+	mine_charge_progress = 0.0
+	dig_charge_bar.visible = false
+	dig_charge_bar.value = 0.0
+
+func _position_charge_bar_at_mouse() -> void:
+	var mouse_local := to_local(get_global_mouse_position())
+	dig_charge_bar.position = mouse_local + Vector2(-56, -20)
+
 # ================= STATE MANAGEMENT =================
 
 func _update_state_after_move(direction: float) -> void:
@@ -245,8 +313,6 @@ func _play_mining_animation_from_mouse_angle() -> void:
 	angle += 90.0
 	if angle < 0.0:
 		angle += 360.0
-	
-	print("Mouse angle: ", angle)
 
 	# Right-facing sectors
 	if angle >= 0.0 and angle < 45.0:
@@ -315,6 +381,9 @@ func _input(event: InputEvent) -> void:
 		emit_signal("preview_layers", true)
 	elif event.is_action_released("2d_layer_preview"):
 		emit_signal("preview_layers", false)
+		
+	if event.is_action_pressed("2d_leave_cave"):
+		GameMaster.go_to(GameMaster.Location.VILLAGE)
 
 # ================ LAYER SWITCHING ================
 

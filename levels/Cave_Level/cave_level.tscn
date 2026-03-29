@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://ba1o6kpqmg2kn" path="res://features/cave/cave_generator/cave_generator.tscn" id="1_15so6"]
 [ext_resource type="Script" uid="uid://cj3hqev1db7hh" path="res://levels/Cave_Level/cave_level.gd" id="1_1680j"]
 [ext_resource type="TileSet" uid="uid://cl8s7sy1yg1fa" path="res://shared/cave_tileset/cave_tileset.tres" id="1_8053v"]
+[ext_resource type="PackedScene" uid="uid://ctoxmv3mqffc1" path="res://features/cave/cave_state/cave_state.tscn" id="2_gwdoe"]
 [ext_resource type="PackedScene" uid="uid://ci6n83k74ykvr" path="res://features/player/player2d/player2d.tscn" id="2_xde8t"]
 [ext_resource type="Script" path="res://features/cave/cave_generator/cave_rock_entry.gd" id="3_mb7q1"]
 [ext_resource type="PackedScene" uid="uid://bpmj14aficryf" path="res://features/z_layer_manager/z_layer_manager.tscn" id="3_xde8t"]
@@ -82,6 +83,8 @@ metadata/_custom_type_script = "uid://c8wjq23hanmux"
 [node name="CaveLevel" type="Node2D" unique_id=1591172046]
 script = ExtResource("1_1680j")
 
+[node name="CaveState" parent="." unique_id=1202534183 instance=ExtResource("2_gwdoe")]
+
 [node name="MineBackgroundLayer" type="CanvasLayer" parent="." unique_id=2069301152]
 layer = -50
 
@@ -103,11 +106,12 @@ smoothing_passes = 4
 tile_map_data = PackedByteArray("AAAAAAAAAAADAAAAAFAAAAEAAAADAAAAAAAAAAIAAAAEAAAAAAAAAAMAAAAEAAAAAAAAAAQAAAAEAAAAAFAAAAUAAAADAAAAAAABAAUAAAAEAAAAAAABAAQAAAADAAAAAAABAAMAAAADAAAAAAABAAIAAAAEAAAAAFABAAEAAAAEAAAAAAABAAAAAAAEAAAAAAAEAAAAAAAEAAAAAAAEAAEAAAADAAAAAFAEAAIAAAAEAAAAAFAEAAMAAAADAAAAAAAEAAQAAAAEAAAAAAAEAAUAAAAEAAAAAAAFAAUAAAAEAAAAAAAFAAQAAAAEAAAAAFAFAAMAAAADAAAAAAAFAAIAAAADAAAAAAAFAAEAAAADAAAAAAAFAAAAAAAEAAAAAAAAAAkAAAAEAAAAAAABAAkAAAADAAAAAAACAAkAAAADAAAAAAADAAkAAAADAAAAAAAEAAkAAAADAAAAAGAFAAkAAAADAAAAAGAAAAgAAAAEAAAAAAABAAgAAAAEAAAAAFACAAgAAAADAAAAAAADAAgAAAADAAAAAGAEAAgAAAADAAAAAAAFAAgAAAAEAAAAAAA=")
 tile_set = ExtResource("1_8053v")
 
-[node name="Player2D" parent="." unique_id=204201863 instance=ExtResource("2_xde8t")]
+[node name="Player2D" parent="." unique_id=204201863 node_paths=PackedStringArray("cave_state") instance=ExtResource("2_xde8t")]
 position = Vector2(189, 129)
+cave_state = NodePath("../CaveState")
 
 [node name="CaveAmbientDarkness" type="CanvasModulate" parent="." unique_id=916345220]
-color = Color(0.22, 0.23, 0.28, 1)
+color = Color(0.18302512, 0.19331458, 0.2345053, 1)
 
 [node name="ZLayerManager" parent="." unique_id=1182993615 node_paths=PackedStringArray("cave_generator", "tile_map_layers") instance=ExtResource("3_xde8t")]
 cave_generator = NodePath("../CaveGenerator")
