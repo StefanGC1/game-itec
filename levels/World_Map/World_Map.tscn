@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c2rgaurc7x0fh" path="res://levels/World_Map/map.gd" id="1_map_script"]
 [ext_resource type="Texture2D" uid="uid://cn570qmda5igf" path="res://levels/World_Map/harta.png" id="2_wohlo"]
+[ext_resource type="AudioStream" uid="uid://bk23adm4ktvfm" path="res://levels/Npc_test_dialogue/Sounds/0_794__The Most Relaxing Waves Ever - Ocean Sounds to Sleep, Study and Chill.mp3" id="2_wohlo"]
 
 [node name="World_Map" type="Node2D" unique_id=1248121438]
 script = ExtResource("1_map_script")
@@ -68,3 +69,10 @@ size_flags_horizontal = 8
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1690549276]
 position = Vector2(958, 541)
+
+[node name="AudioStreamWaves" type="AudioStreamPlayer" parent="." unique_id=357657384]
+stream = ExtResource("2_wohlo")
+volume_db = -10.0
+pitch_scale = 2.0
+autoplay = true
+bus = &"SFX"

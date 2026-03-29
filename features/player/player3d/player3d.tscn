@@ -93,3 +93,4 @@ transform = Transform3D(1, 0, 0, 0, 0.8687094, 0.49532217, 0, -0.49532217, 0.868
 stream = ExtResource("3_08cat")
 volume_db = 20.0
 pitch_scale = 2.0
+bus = &"SFX"

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://kr2w74bsfbs3"
+path="res://.godot/imported/1_5__Drilling - Sound Effect.mp3-cbb5223d250243a1170392fc2725fc54.mp3str"
+
+[deps]
+
+source_file="res://levels/Npc_test_dialogue/Sounds/1_5__Drilling - Sound Effect.mp3"
+dest_files=["res://.godot/imported/1_5__Drilling - Sound Effect.mp3-cbb5223d250243a1170392fc2725fc54.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0.0
+bpm=0.0
+beat_count=0
+bar_beats=4

@@ -6,6 +6,7 @@ extends CharacterBody2D
 @onready var audio_walking_brick = $AudioStreamPlayer_walk
 @onready var audio_jumping = $AudioStreamPlayer_jump
 @onready var audio_landing = $AudioStreamPlayer_land_brick
+@onready var audio_drill = $AudioStreamPlayer_dril
 
 const FLOOR_EPSILON := 0.01
 
@@ -93,6 +94,9 @@ func _physics_process(delta: float) -> void:
 		was_on_floor = is_on_floor()
 		return
 		
+	#if Input.is_action_just_pressed("2d_jump") and (current_state == PlayerState.IDLE or current_state == PlayerState.RUN):
+		#audio_jumping.play()
+		
 	if get_real_velocity() != Vector2.ZERO and is_on_floor():
 		if not audio_walking_brick.playing:
 			audio_walking_brick.play()
@@ -166,6 +170,7 @@ func _try_consume_buffered_jump(on_floor_before: bool) -> void:
 
 	if on_floor_before or coyote_window_active:
 		velocity.y = jump_velocity
+		audio_jumping.play()
 		jump_buffer_active = false
 		if not jump_buffer_timer.is_stopped():
 			jump_buffer_timer.stop()
@@ -247,8 +252,12 @@ func _position_charge_bar_at_mouse() -> void:
 
 func _update_state_after_move(direction: float) -> void:
 	if _is_mining_input_active():
+		if not audio_drill.playing:
+			audio_drill.play()
 		_set_state(PlayerState.MINING)
 		return
+	
+	audio_drill.stop()
 
 	var on_floor_after := is_on_floor()
 	var just_landed := (not was_on_floor) and on_floor_after

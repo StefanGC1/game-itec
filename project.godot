@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="game-itec"
-run/main_scene="res://levels/World_Village/Village.tscn"
+run/main_scene="uid://b3xp6jhnerwlo"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 

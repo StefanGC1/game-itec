@@ -1,4 +1,4 @@
-extends Control
+extends CanvasLayer
 
 func _ready() -> void:
 	# Meniul trebuie să fie ascuns când pornește nivelul

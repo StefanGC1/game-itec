@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bk23adm4ktvfm"
+path="res://.godot/imported/0_794__The Most Relaxing Waves Ever - Ocean Sounds to Sleep, Study and Chill.mp3-9aa47157ccb6c27711c6fcf385f872ac.mp3str"
+
+[deps]
+
+source_file="res://levels/Npc_test_dialogue/Sounds/0_794__The Most Relaxing Waves Ever - Ocean Sounds to Sleep, Study and Chill.mp3"
+dest_files=["res://.godot/imported/0_794__The Most Relaxing Waves Ever - Ocean Sounds to Sleep, Study and Chill.mp3-9aa47157ccb6c27711c6fcf385f872ac.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0.0
+bpm=0.0
+beat_count=0
+bar_beats=4
