@@ -14,6 +14,8 @@ const ACTION_LEFT := "3d_left"
 const ACTION_RIGHT := "3d_right"
 const ACTION_FORWARD := "3d_forward"
 const ACTION_BACKWARD := "3d_backward"
+const ANIM_IDLE := "Idle"
+const ANIM_WALKING := "Walking"
 
 @export var credits := 300
 
@@ -38,10 +40,13 @@ func _ready() -> void:
 	_connect_dialogue_signals()
 
 @onready var Walking_on_grass_sound = $AudioStreamPlayer_walking_grass
+@onready var _animated_sprite: AnimatedSprite3D = $AnimatedSprite3D
 
 func _physics_process(_delta: float) -> void:
 	if _input_locked:
 		velocity = Vector3.ZERO
+		if _animated_sprite.animation != ANIM_IDLE:
+			_animated_sprite.play(ANIM_IDLE)
 		move_and_slide()
 		return
 
@@ -51,6 +56,11 @@ func _physics_process(_delta: float) -> void:
 	var direction := Vector3(horizontal, 0.0, vertical)
 	if direction.length_squared() > 1.0:
 		direction = direction.normalized()
+
+	if horizontal < 0.0:
+		_animated_sprite.flip_h = true
+	elif horizontal > 0.0:
+		_animated_sprite.flip_h = false
 
 	velocity.x = direction.x * SPEED
 	velocity.y = 0.0
@@ -63,8 +73,12 @@ func _physics_process(_delta: float) -> void:
 	if get_real_velocity().length() > 0.1:
 		if not Walking_on_grass_sound.playing:
 			Walking_on_grass_sound.play()
+		if _animated_sprite.animation != ANIM_WALKING:
+			_animated_sprite.play(ANIM_WALKING)
 	else:
 		Walking_on_grass_sound.stop()
+		if _animated_sprite.animation != ANIM_IDLE:
+			_animated_sprite.play(ANIM_IDLE)
 
 func can_mine_tier(required_drill_level: int) -> bool:
 	return drill_level >= required_drill_level

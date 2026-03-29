@@ -67,20 +67,24 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_wa86y"]
+height = 1.6659546
 
 [node name="Player3d" type="CharacterBody3D" unique_id=923980099]
 script = ExtResource("1_wa86y")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=1930982315]
+transform = Transform3D(2.6037517, 0, 0, 0, 2.6037517, 0, 0, 0, 1, 0, 0, 0)
+texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_vct0l")
 animation = &"Walking"
-frame_progress = 0.3258588
+frame_progress = 0.58893555
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=627301171]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0043029785, 0)
 shape = SubResource("CapsuleShape3D_wa86y")
 
 [node name="Camera3D" type="Camera3D" parent="CollisionShape3D" unique_id=1748118759]
-transform = Transform3D(1, 0, 0, 0, 0.9105683, 0.41335872, 0, -0.41335872, 0.9105683, 0, 1.8288399, 3.0595422)
+transform = Transform3D(1, 0, 0, 0, 0.8687094, 0.49532217, 0, -0.49532217, 0.8687094, 0, 2.3847208, 3.5773318)
 
 [node name="AudioStreamPlayer_walking_grass" type="AudioStreamPlayer2D" parent="." unique_id=392568175]
 stream = ExtResource("3_08cat")
