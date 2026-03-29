@@ -80,6 +80,14 @@ metadata/_custom_type_script = "uid://c8wjq23hanmux"
 [node name="CaveLevel" type="Node2D" unique_id=1591172046]
 script = ExtResource("1_1680j")
 
+[node name="MineBackgroundLayer" type="CanvasLayer" parent="." unique_id=2069301152]
+layer = -50
+
+[node name="MineBackground" type="ColorRect" parent="MineBackgroundLayer" unique_id=798621204]
+offset_right = 11520.0
+offset_bottom = 6480.0
+color = Color(0.0352941, 0.0666667, 0.160784, 1)
+
 [node name="CaveGenerator" parent="." unique_id=1078709370 instance=ExtResource("1_15so6")]
 tile_set = ExtResource("1_8053v")
 rock_entries = Array[ExtResource("3_mb7q1")]([SubResource("Resource_1680j"), SubResource("Resource_ppwmx"), SubResource("Resource_gwdoe")])
@@ -95,6 +103,9 @@ tile_set = ExtResource("1_8053v")
 
 [node name="Player2D" parent="." unique_id=204201863 instance=ExtResource("2_xde8t")]
 position = Vector2(189, 129)
+
+[node name="CaveAmbientDarkness" type="CanvasModulate" parent="." unique_id=916345220]
+color = Color(0.22, 0.23, 0.28, 1)
 
 [node name="ZLayerManager" parent="." unique_id=1182993615 node_paths=PackedStringArray("cave_generator", "tile_map_layers") instance=ExtResource("3_xde8t")]
 cave_generator = NodePath("../CaveGenerator")
