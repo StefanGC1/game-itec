@@ -1,9 +1,7 @@
 extends Node2D
 
 const HOME_VILLAGE_NAME := "HomeVillage"
-const WORLD_VILLAGE_SCENE := "res://levels/World_Village/Village.tscn"
 const TRADE_MENU_UI_SCENE := preload("res://ui/trade_menu_ui.tscn")
-const INVENTORY_UI_SCENE := preload("res://ui/inventory_overlay.tscn")
 
 @onready var home_village_button: Button = $HomeVillage
 @onready var village_buttons: Array[Button] = [
@@ -19,15 +17,12 @@ const INVENTORY_UI_SCENE := preload("res://ui/inventory_overlay.tscn")
 ]
 
 var trade_menu: CanvasLayer
-var inventory_ui: CanvasLayer
 var status_label: Label
 
 
 func _ready() -> void:
 	trade_menu = TRADE_MENU_UI_SCENE.instantiate() as CanvasLayer
 	add_child(trade_menu)
-	inventory_ui = INVENTORY_UI_SCENE.instantiate() as CanvasLayer
-	add_child(inventory_ui)
 	trade_menu.buy_requested.connect(_on_trade_buy_requested)
 	trade_menu.sell_requested.connect(_on_trade_sell_requested)
 	trade_menu.close_requested.connect(_on_trade_close_requested)
@@ -45,9 +40,6 @@ func _ready() -> void:
 	status_label.size = Vector2(860, 30)
 	add_child(status_label)
 
-	if has_node("/root/GameState"):
-		get_node("/root/GameState").call("set_location", "world_map")
-
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not trade_menu:
@@ -59,9 +51,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _on_home_village_pressed() -> void:
-	if has_node("/root/GameState"):
-		get_node("/root/GameState").call("set_location", "village")
-	get_tree().change_scene_to_file(WORLD_VILLAGE_SCENE)
+	GameMaster.go_to(GameMaster.Location.VILLAGE)
 
 
 func _on_remote_village_pressed(village_name: String) -> void:

@@ -1,13 +1,7 @@
 extends Node2D
 
-const INVENTORY_UI_SCENE := preload("res://ui/inventory_overlay.tscn")
 
-
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var inventory_ui := INVENTORY_UI_SCENE.instantiate() as CanvasLayer
-	add_child(inventory_ui)
-
 	if has_node("/root/GameState"):
 		get_node("/root/GameState").call("set_location", "mine")
 

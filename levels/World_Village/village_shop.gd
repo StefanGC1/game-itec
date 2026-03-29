@@ -2,9 +2,6 @@ extends Node3D
 
 const SHOP_TOGGLE_ACTION := "shop_toggle"
 const SHOP_UI_SCENE := preload("res://ui/upgrade_shop_ui.tscn")
-const INVENTORY_UI_SCENE := preload("res://ui/inventory_overlay.tscn")
-const WORLD_MAP_SCENE := "res://levels/World_Map/World_Map.tscn"
-const CAVE_LEVEL_SCENE := "res://levels/Cave_Level/cave_level.tscn"
 const ENTRANCE_FALLBACK_RADIUS := 2.4
 
 @onready var shop_area: Area3D = $Area3D
@@ -14,11 +11,9 @@ var map_entrance: Area3D
 var mine_entrance: Area3D
 
 var shop_ui: CanvasLayer
-var inventory_ui: CanvasLayer
 var player_in_shop := false
 var status_message := "Walk into the shop area to upgrade."
 var shop_open := false
-var map_transition_started := false
 
 
 func _ready() -> void:
@@ -27,8 +22,6 @@ func _ready() -> void:
 
 	shop_ui = SHOP_UI_SCENE.instantiate() as CanvasLayer
 	add_child(shop_ui)
-	inventory_ui = INVENTORY_UI_SCENE.instantiate() as CanvasLayer
-	add_child(inventory_ui)
 	shop_ui.connect("drill_upgrade_requested", _on_drill_upgrade_requested)
 	shop_ui.connect("mining_speed_upgrade_requested", _on_mining_speed_upgrade_requested)
 	shop_ui.connect("fuel_capacity_upgrade_requested", _on_fuel_upgrade_requested)
@@ -46,11 +39,12 @@ func _ready() -> void:
 	if shop_label:
 		shop_label.text = "Upgrade Shop\nPress E while inside area"
 	_sync_player_state_from_game_state()
+	_restore_village_position()
 	_refresh_shop_ui()
 
 
 func _physics_process(_delta: float) -> void:
-	if map_transition_started:
+	if GameMaster.is_transitioning:
 		return
 	if not player:
 		return
@@ -187,35 +181,37 @@ func _on_mine_entrance_body_entered(body: Node3D) -> void:
 
 
 func _go_to_world_map() -> void:
-	if map_transition_started:
+	if GameMaster.is_transitioning:
 		return
-	map_transition_started = true
 
 	if shop_open:
 		_close_shop()
 
 	_sync_game_state_from_player()
-
-	if has_node("/root/GameState"):
-		get_node("/root/GameState").call("set_location", "world_map")
-
-	get_tree().change_scene_to_file(WORLD_MAP_SCENE)
+	_cache_village_position()
+	GameMaster.go_to(GameMaster.Location.WORLD_MAP)
 
 
 func _go_to_cave_level() -> void:
-	if map_transition_started:
+	if GameMaster.is_transitioning:
 		return
-	map_transition_started = true
 
 	if shop_open:
 		_close_shop()
 
 	_sync_game_state_from_player()
+	_cache_village_position()
+	GameMaster.go_to(GameMaster.Location.CAVE)
 
-	if has_node("/root/GameState"):
-		get_node("/root/GameState").call("set_location", "cave_level")
 
-	get_tree().change_scene_to_file(CAVE_LEVEL_SCENE)
+func _cache_village_position() -> void:
+	if player:
+		GameMaster.cached_village_position = player.global_transform.origin
+
+
+func _restore_village_position() -> void:
+	if player and GameMaster.cached_village_position is Vector3:
+		player.global_transform.origin = GameMaster.cached_village_position
 
 
 func _sync_player_state_from_game_state() -> void:

@@ -11,12 +11,12 @@
 [ext_resource type="PackedScene" uid="uid://eobprcx4rt8v" path="res://features/player/player3d/player3d.tscn" id="9_eq68r"]
 [ext_resource type="Script" uid="uid://cjnf031gh6j3r" path="res://levels/World_Village/village_shop.gd" id="10_shop"]
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_gidne"]
-load_path = "res://.godot/imported/TX Tileset Grass.png-1eeaa38d4c3d7100aca6abcbc0227701.s3tc.ctex"
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_f7ft4"]
+load_path = "res://.godot/imported/TX Tileset Grass.png-7f136b84b805f23f59ef731a47d705b5.s3tc.ctex"
 
 [sub_resource type="Resource" id="Resource_jhrf8"]
 script = ExtResource("3_04moi")
-tileset_texture = SubResource("CompressedTexture2D_gidne")
+tileset_texture = SubResource("CompressedTexture2D_f7ft4")
 selected_tile_uv = Rect2(64, 32, 32, 32)
 smart_select_mode = 1
 main_app_mode = 2
