@@ -1,6 +1,6 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene format=3 uid="uid://kl548yljdq8x"]
 
-[ext_resource type="Script" path="res://ui/trade_menu_ui.gd" id="1_trade_ui"]
+[ext_resource type="Script" uid="uid://b8oxw40271wso" path="res://ui/trade_menu_ui.gd" id="1_trade_ui"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
 content_margin_left = 18.0
@@ -34,22 +34,6 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
-content_margin_left = 10.0
-content_margin_top = 7.0
-content_margin_right = 10.0
-content_margin_bottom = 7.0
-bg_color = Color(0.258824, 0.333333, 0.427451, 0.96)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.635294, 0.823529, 0.921569, 0.9)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
 content_margin_left = 10.0
 content_margin_top = 7.0
@@ -66,6 +50,22 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+content_margin_left = 10.0
+content_margin_top = 7.0
+content_margin_right = 10.0
+content_margin_bottom = 7.0
+bg_color = Color(0.258824, 0.333333, 0.427451, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.635294, 0.823529, 0.921569, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_status"]
 content_margin_left = 8.0
 content_margin_top = 7.0
@@ -77,16 +77,16 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[node name="TradeMenuUI" type="CanvasLayer"]
+[node name="TradeMenuUI" type="CanvasLayer" unique_id=1200675557]
 script = ExtResource("1_trade_ui")
 
-[node name="Backdrop" type="ColorRect" parent="."]
+[node name="Backdrop" type="ColorRect" parent="." unique_id=827607351]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0, 0, 0, 0.55)
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=909127651]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -95,99 +95,97 @@ offset_top = 120.0
 offset_right = -170.0
 offset_bottom = -120.0
 
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer" unique_id=796586037]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer" unique_id=334060099]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 14
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer" unique_id=342260673]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Title" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=873868610]
 layout_mode = 2
+theme_override_font_sizes/font_size = 28
 text = "Trade Market"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 28
 
-[node name="CreditsValue" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="CreditsValue" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2017852464]
 layout_mode = 2
-text = "Credits: 0"
 theme_override_font_sizes/font_size = 18
+text = "Credits: 0"
 
-[node name="InventoryValue" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="InventoryValue" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=960545342]
+modulate = Color(0.854902, 0.937255, 0.984314, 1)
 layout_mode = 2
 text = "Inventory:"
-modulate = Color(0.854902, 0.937255, 0.984314, 1)
 autowrap_mode = 3
 
-[node name="ItemRow" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ItemRow" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=601901673]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="ItemLabel" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemRow"]
+[node name="ItemLabel" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemRow" unique_id=1899151985]
 layout_mode = 2
 text = "Resource"
 
-[node name="ItemOptionButton" type="OptionButton" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemRow"]
+[node name="ItemOptionButton" type="OptionButton" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/ItemRow" unique_id=178745015]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PricesValue" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="PricesValue" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1623346915]
 layout_mode = 2
 text = "Select a resource to view prices."
 autowrap_mode = 3
 
-[node name="QuantityRow" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="QuantityRow" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1307825850]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="QuantityLabel" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/QuantityRow"]
+[node name="QuantityLabel" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/QuantityRow" unique_id=1225571062]
 layout_mode = 2
 text = "Quantity"
 
-[node name="QuantitySpinBox" type="SpinBox" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/QuantityRow"]
+[node name="QuantitySpinBox" type="SpinBox" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/QuantityRow" unique_id=617402887]
 layout_mode = 2
 min_value = 1.0
-max_value = 100.0
-step = 1.0
 value = 5.0
 
-[node name="Buttons" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Buttons" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1079291762]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="BuyButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons"]
+[node name="BuyButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=1711418034]
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "Buy Selected"
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 
-[node name="SellButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons"]
+[node name="SellButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=1840850698]
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "Sell Selected"
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 
-[node name="CloseButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="CloseButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=247787136]
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "Close"
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 
-[node name="StatusValue" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="StatusValue" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=900040749]
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_status")
 text = "Status: Select an action."
 autowrap_mode = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_status")

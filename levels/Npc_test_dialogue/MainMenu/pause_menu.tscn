@@ -210,33 +210,34 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 48
 text = "3d-controlls: 
-w-up
- a-left
- s-backwards 
-d-right"
+  w-up
+  a-left
+  s-backwards 
+ d-right"
 
 [node name="Label2" type="Label" parent="MarginContainer/GridContainer" unique_id=979705882]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8862745, 0.8784314, 0.8862745, 1)
 theme_override_font_sizes/font_size = 48
 text = "2d-controlls: mining-LMB
-a-left d-right
-Space-jump
-E-layer_forward
-Q-layer_backward
-holdCtrl-preview_layer"
+ 	a-left, d-right
+	Space - jump
+ 	E - layer_forward
+ 	Q - layer_backward
+	Hold Ctrl - preview_layer"
 
 [node name="Label3" type="Label" parent="." unique_id=685479804]
-offset_left = 735.0
-offset_top = 475.0
-offset_right = 1342.0
-offset_bottom = 743.0
+offset_left = 610.0
+offset_top = 194.0
+offset_right = 1281.0
+offset_bottom = 496.0
 theme_override_colors/font_color = Color(0.8862745, 0.8784314, 0.8862745, 1)
 theme_override_font_sizes/font_size = 42
 text = "Other:
 T-talk
 E-open_shop
-"
+Esc-pause
+L-Exit mine"
 
 [connection signal="value_changed" from="VBoxContainer/SFX" to="VBoxContainer/SFX" method="_on_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/Music" to="VBoxContainer/Music" method="_on_value_changed"]
