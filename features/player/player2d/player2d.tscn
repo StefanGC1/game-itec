@@ -135,8 +135,31 @@ height = 1024
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_hxpdd"]
+radius = 96.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hxpdd"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4xh3n"]
+bg_color = Color(0.79618526, 0.4054474, 0.18034497, 1)
+
 [node name="Player2D" type="CharacterBody2D" unique_id=204201863]
 script = ExtResource("1_sacy7")
+max_speed = null
+ground_accel = null
+ground_decel = null
+air_accel = null
+air_decel = null
+jump_velocity = null
+rise_gravity = null
+fall_gravity = null
+jump_cut_multiplier = null
+coyote_time = null
+jump_buffer_time = null
+landing_state_duration = null
+layer_switch_cooldown_seconds = null
+mine_charge_time = null
 
 [node name="EnvCollision" type="CollisionShape2D" parent="." unique_id=2066574137]
 position = Vector2(0, 1)
@@ -160,9 +183,25 @@ texture_scale = 1.35
 zoom = Vector2(1.75, 1.75)
 limit_left = 0
 limit_top = 0
-limit_right = 4800
+limit_right = 2432
 limit_bottom = 9600
 limit_smoothed = true
 
 [node name="FootPosition" type="Marker2D" parent="." unique_id=880649287]
 position = Vector2(0, 26)
+
+[node name="MiningBox" type="Area2D" parent="." unique_id=1150825042]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MiningBox" unique_id=1100825009]
+shape = SubResource("CircleShape2D_hxpdd")
+
+[node name="Dig_Charge_Up" type="ProgressBar" parent="." unique_id=34875587]
+visible = false
+z_index = 10
+offset_left = -56.0
+offset_top = -56.0
+offset_right = 56.0
+offset_bottom = -48.0
+theme_override_styles/background = SubResource("StyleBoxFlat_hxpdd")
+theme_override_styles/fill = SubResource("StyleBoxFlat_4xh3n")
+show_percentage = false

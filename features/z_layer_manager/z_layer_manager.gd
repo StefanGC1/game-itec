@@ -186,6 +186,79 @@ func is_valid_switch(direction: int, player_position: Vector2) -> bool:
 	print("Target layer at current cell has " + str(collision_count) + " collision polygons")
 	return collision_count == 0
 
+# ================ MINING ================
+
+var drill_level: int = 1
+
+func _is_border_tile(map_pos: Vector2i) -> bool:
+	if cave_generator == null:
+		return false
+	var x_offset := floori(float(cave_generator.width) / 2.0)
+	var grid_x := map_pos.x + x_offset
+	var grid_y := map_pos.y
+	return grid_x <= 0 or grid_x >= cave_generator.width - 1 or grid_y <= 0 or grid_y >= cave_generator.height - 1
+
+func _can_break_tier_gate(map_pos: Vector2i) -> bool:
+	if cave_generator == null:
+		return false
+	if _is_border_tile(map_pos):
+		return false
+	var y := map_pos.y
+	var sep_h: int = cave_generator.separator_height
+	var tier2_start: int = cave_generator.tier2_sep_at
+	var tier3_start: int = cave_generator.tier3_sep_at
+	if drill_level >= 2 and y >= tier2_start and y < tier2_start + sep_h:
+		return true
+	if drill_level >= 3 and y >= tier3_start and y < tier3_start + sep_h:
+		return true
+	return false
+
+func is_mineable_at(global_pos: Vector2) -> bool:
+	if not _is_initialized or tile_map_layers.is_empty():
+		return false
+	var layer: TileMapLayer = tile_map_layers[current_layer]
+	var local_pos := layer.to_local(global_pos)
+	var map_pos := layer.local_to_map(local_pos)
+	var tile_data: TileData = layer.get_cell_tile_data(map_pos)
+	if tile_data == null:
+		return false
+	var tile_type: String = tile_data.get_custom_data("type")
+	if tile_type == "rock" or tile_type == "ore":
+		return true
+	if tile_type == "tier_gate":
+		return _can_break_tier_gate(map_pos)
+	return false
+
+func mine_at_position(global_pos: Vector2) -> void:
+	if not _is_initialized or tile_map_layers.is_empty():
+		return
+
+	var layer: TileMapLayer = tile_map_layers[current_layer]
+	var local_pos := layer.to_local(global_pos)
+	var map_pos := layer.local_to_map(local_pos)
+	var tile_data: TileData = layer.get_cell_tile_data(map_pos)
+
+	if tile_data == null:
+		return
+
+	var tile_type: String = tile_data.get_custom_data("type")
+	match tile_type:
+		"rock":
+			print("Mined rock at ", map_pos)
+			layer.erase_cell(map_pos)
+		"ore":
+			var ore_id: String = tile_data.get_custom_data("ore_id")
+			print("Mined ore: ", ore_id, " at ", map_pos)
+			layer.erase_cell(map_pos)
+			if ore_id != "":
+				GameState.add_inventory_item(ore_id, 1)
+		"tier_gate":
+			if _can_break_tier_gate(map_pos):
+				print("Mined tier gate at ", map_pos)
+				layer.erase_cell(map_pos)
+		_:
+			print("Encountered fallback tile type: ", tile_type, " at ", map_pos)
+
 # ================ DEBUG =================
 
 @export_tool_button("Layer forward", "MoveUp") var layer_frwd_btn: Callable = editor_layer_forward
