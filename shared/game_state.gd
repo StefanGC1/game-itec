@@ -207,6 +207,10 @@ func add_inventory_item(item_id: String, quantity: int) -> Dictionary:
 	inventory[item_id] = get_inventory_amount(item_id) + quantity
 	item_count += quantity
 	inventory_changed.emit(item_id, int(inventory[item_id]))
+
+	if item_id == "adamantite" and int(inventory["adamantite"]) >= 50:
+		GameMaster.go_to(GameMaster.Location.END_CUTSCENE)
+
 	return {
 		"success": true,
 		"message": "Added " + str(quantity) + " " + item_id + " to inventory.",

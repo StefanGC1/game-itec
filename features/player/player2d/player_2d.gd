@@ -25,7 +25,7 @@ enum PlayerState {
 @export var cave_state: CaveState
 
 @export_group("Movement")
-@export var max_speed: float = 320.0
+@export var max_speed: float = 380.0
 @export var ground_accel: float = 1600.0
 @export var ground_decel: float = 2200.0
 @export var air_accel: float = 900.0

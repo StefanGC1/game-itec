@@ -4,7 +4,7 @@ extends CanvasLayer
 
 func _on_start_game_button_pressed() -> void:
 	MusicController.get_node("AudioStreamPlayer2D").stop()
-	get_tree().change_scene_to_file("res://levels/World_Village/Village.tscn")
+	GameMaster.go_to(GameMaster.Location.INTRO_CUTSCENE)
 
 
 func _on_optionst_game_button_pressed() -> void:

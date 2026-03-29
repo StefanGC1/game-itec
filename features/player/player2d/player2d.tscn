@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://rcxcvtud0uud" path="res://features/player/player2d/player_2d.gd" id="1_sacy7"]
 [ext_resource type="Texture2D" uid="uid://jbgxxbloujtx" path="res://assets/Spritesheets/miningguy.png" id="2_hxpdd"]
 [ext_resource type="AudioStream" uid="uid://c5kfb4gjajggr" path="res://levels/Npc_test_dialogue/Sounds/Footstep_concrete_insta.mp3" id="3_16rtq"]
+[ext_resource type="Texture2D" uid="uid://cs5wbce63t5ef" path="res://assets/Spritesheets/miningguy_animations_final.png" id="3_d3pm8"]
 [ext_resource type="AudioStream" uid="uid://c2ii4koh38rrq" path="res://levels/Npc_test_dialogue/Sounds/0_1__Cartoon Jump Sound Effect.mp3" id="4_d3pm8"]
 [ext_resource type="AudioStream" uid="uid://ct5cfh1nvwefj" path="res://levels/Npc_test_dialogue/Sounds/Landinig_brick_sound.mp3" id="5_be2mw"]
 [ext_resource type="AudioStream" uid="uid://dyvaa7fkmbaix" path="res://levels/World_Village/Sounds/0_30__Authentic Dentist Drill Sound Effects _ Precision Start, Continuous Run, and Gradual Stop.mp3" id="6_d3pm8"]
@@ -43,21 +44,33 @@ region = Rect2(640, 0, 64, 64)
 atlas = ExtResource("2_hxpdd")
 region = Rect2(704, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_4xh3n"]
-atlas = ExtResource("2_hxpdd")
+[sub_resource type="AtlasTexture" id="AtlasTexture_51cv0"]
+atlas = ExtResource("3_d3pm8")
 region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t2mdn"]
+atlas = ExtResource("3_d3pm8")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tss0d"]
+atlas = ExtResource("3_d3pm8")
+region = Rect2(128, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tbt8r"]
 atlas = ExtResource("2_hxpdd")
 region = Rect2(192, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_16rtq"]
-atlas = ExtResource("2_hxpdd")
-region = Rect2(64, 0, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_71cfr"]
+atlas = ExtResource("3_d3pm8")
+region = Rect2(192, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_d3pm8"]
-atlas = ExtResource("2_hxpdd")
-region = Rect2(128, 0, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_pftty"]
+atlas = ExtResource("3_d3pm8")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pkj12"]
+atlas = ExtResource("3_d3pm8")
+region = Rect2(320, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_be2mw"]
 animations = [{
@@ -102,11 +115,17 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_4xh3n")
+"texture": SubResource("AtlasTexture_51cv0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t2mdn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tss0d")
 }],
-"loop": false,
+"loop": true,
 "name": &"idle",
-"speed": 5.0
+"speed": 2.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -118,14 +137,17 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_16rtq")
+"texture": SubResource("AtlasTexture_71cfr")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_d3pm8")
+"texture": SubResource("AtlasTexture_pftty")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pkj12")
 }],
 "loop": true,
 "name": &"run",
-"speed": 5.0
+"speed": 6.0
 }]
 
 [sub_resource type="Gradient" id="Gradient_light"]
@@ -157,7 +179,8 @@ shape = SubResource("CapsuleShape2D_hxpdd")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=278199187]
 sprite_frames = SubResource("SpriteFrames_be2mw")
-animation = &"idle"
+animation = &"run"
+frame_progress = 0.15422776
 
 [node name="MinerLight" type="PointLight2D" parent="." unique_id=1527309401]
 texture_filter = 2

@@ -1,17 +1,21 @@
 extends Node
 
-enum Location { VILLAGE, WORLD_MAP, CAVE }
+enum Location { VILLAGE, WORLD_MAP, CAVE, INTRO_CUTSCENE, END_CUTSCENE }
 
 const SCENES := {
-	Location.VILLAGE:   "res://levels/World_Village/Village.tscn",
-	Location.WORLD_MAP: "res://levels/World_Map/World_Map.tscn",
-	Location.CAVE:      "res://levels/Cave_Level/cave_level.tscn",
+	Location.VILLAGE:        "res://levels/World_Village/Village.tscn",
+	Location.WORLD_MAP:      "res://levels/World_Map/World_Map.tscn",
+	Location.CAVE:           "res://levels/Cave_Level/cave_level.tscn",
+	Location.INTRO_CUTSCENE: "res://levels/Cutscenes/intro_cutscene.tscn",
+	Location.END_CUTSCENE:   "res://levels/Cutscenes/end_cutscene.tscn",
 }
 
 const LOCATION_NAMES := {
-	Location.VILLAGE:   "village",
-	Location.WORLD_MAP: "world_map",
-	Location.CAVE:      "cave_level",
+	Location.VILLAGE:        "village",
+	Location.WORLD_MAP:      "world_map",
+	Location.CAVE:           "cave_level",
+	Location.INTRO_CUTSCENE: "intro_cutscene",
+	Location.END_CUTSCENE:   "end_cutscene",
 }
 
 const FADE_DURATION := 0.35
