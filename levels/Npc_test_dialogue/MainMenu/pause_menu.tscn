@@ -4,244 +4,289 @@
 [ext_resource type="Texture2D" uid="uid://bkxa6yb0nr2br" path="res://levels/Npc_test_dialogue/MainMenu/bridge.png" id="1_xfol0"]
 [ext_resource type="Script" uid="uid://sjprid6hgk0x" path="res://levels/Npc_test_dialogue/MainMenu/h_slider.gd" id="2_kvi62"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dhs1f"]
-texture = ExtResource("1_xfol0")
-modulate_color = Color(0.3862508, 0.38625085, 0.38625085, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 30.0
+content_margin_top = 28.0
+content_margin_right = 30.0
+content_margin_bottom = 30.0
+bg_color = Color(0.0509804, 0.0784314, 0.117647, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.352941, 0.631373, 0.847059, 0.58)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+shadow_color = Color(0, 0, 0, 0.42)
+shadow_size = 16
 
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_27wmf"]
-thickness = 8
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_normal"]
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+bg_color = Color(0.121569, 0.211765, 0.298039, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.380392, 0.658824, 0.870588, 0.6)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_ymevk"]
-color = Color(0.36862746, 0.60784316, 0.22745098, 1)
-thickness = 8
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_hover"]
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+bg_color = Color(0.168627, 0.278431, 0.388235, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.533333, 0.815686, 0.964706, 0.82)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_2h5er"]
-thickness = 8
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_pressed"]
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+bg_color = Color(0.0941176, 0.156863, 0.231373, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.309804, 0.560784, 0.764706, 0.88)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_180lp"]
-color = Color(0.36862746, 0.60784316, 0.22745098, 1)
-thickness = 8
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_slider_bg"]
+color = Color(0.176471, 0.247059, 0.32549, 1)
+thickness = 10
 
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_mrjmh"]
-color = Color(0.05109611, 0.05109611, 0.051096104, 1)
-thickness = 8
-
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_o5uli"]
-color = Color(0.3683883, 0.6067201, 0.22560424, 1)
-thickness = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_htppm"]
-bg_color = Color(0.82889193, 0.4950636, 0.44916785, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_slider_fill"]
+color = Color(0.478431, 0.764706, 0.933333, 1)
+thickness = 10
 
 [node name="PauseMenu" type="CanvasLayer" unique_id=830203127]
 process_mode = 3
 layer = 500
 script = ExtResource("1_kvi62")
 
-[node name="Panel" type="Panel" parent="." unique_id=326786350]
+[node name="Background" type="TextureRect" parent="." unique_id=326786350]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_dhs1f")
+texture = ExtResource("1_xfol0")
+expand_mode = 1
+stretch_mode = 6
+modulate = Color(0.6, 0.67, 0.8, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1197608480]
-offset_left = 1000.0
-offset_top = 194.0
-offset_right = 2070.0
-offset_bottom = 894.0
-scale = Vector2(0.7, 0.7)
-theme_override_constants/separation = 50
+[node name="Scrim" type="ColorRect" parent="." unique_id=1197608480]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0156863, 0.0196078, 0.0313726, 0.7)
 
-[node name="SFX" type="HSlider" parent="VBoxContainer" unique_id=1779758066]
-custom_minimum_size = Vector2(0, 200)
+[node name="MainPanel" type="PanelContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -600.0
+offset_top = -360.0
+offset_right = 600.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel"]
 layout_mode = 2
-theme_override_styles/slider = SubResource("StyleBoxLine_27wmf")
-theme_override_styles/grabber_area = SubResource("StyleBoxLine_ymevk")
+
+[node name="Root" type="VBoxContainer" parent="MainPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Header" type="HBoxContainer" parent="MainPanel/MarginContainer/Root"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainPanel/MarginContainer/Root/Header" unique_id=1780659649]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.882353, 0.945098, 1, 1)
+theme_override_font_sizes/font_size = 64
+text = "Paused"
+
+[node name="Hint" type="Label" parent="MainPanel/MarginContainer/Root/Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.662745, 0.792157, 0.913725, 0.95)
+theme_override_font_sizes/font_size = 24
+text = "Press Esc to resume"
+horizontal_alignment = 2
+
+[node name="Separator" type="HSeparator" parent="MainPanel/MarginContainer/Root"]
+layout_mode = 2
+
+[node name="Body" type="HBoxContainer" parent="MainPanel/MarginContainer/Root"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainPanel/MarginContainer/Root/Body" unique_id=1817608480]
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="AudioTitle" type="Label" parent="MainPanel/MarginContainer/Root/Body/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.803922, 0.901961, 0.980392, 1)
+theme_override_font_sizes/font_size = 34
+text = "Audio"
+
+[node name="sfx_label" type="Label" parent="MainPanel/MarginContainer/Root/Body/VBoxContainer" unique_id=2097061756]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.752941, 0.858824, 0.941176, 1)
+theme_override_font_sizes/font_size = 24
+text = "SFX Volume"
+
+[node name="SFX" type="HSlider" parent="MainPanel/MarginContainer/Root/Body/VBoxContainer" unique_id=1779758066]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_override_styles/slider = SubResource("StyleBoxLine_slider_bg")
+theme_override_styles/grabber_area = SubResource("StyleBoxLine_slider_fill")
 max_value = 1.0
 step = 0.001
 value = 1.0
 script = ExtResource("2_kvi62")
 bus_name = "SFX"
 
-[node name="sfx_label" type="Label" parent="VBoxContainer/SFX" unique_id=2097061756]
-layout_mode = 0
-offset_left = -4.285732
-offset_top = -35.71429
-offset_right = 805.7143
-offset_bottom = 52.28571
-theme_override_colors/font_color = Color(0, 0.86649793, 0.5979706, 1)
-theme_override_font_sizes/font_size = 64
-text = "SFX Volume"
-
-[node name="Music" type="HSlider" parent="VBoxContainer" unique_id=112497257]
-custom_minimum_size = Vector2(0, 200)
+[node name="music_label" type="Label" parent="MainPanel/MarginContainer/Root/Body/VBoxContainer" unique_id=1141460399]
 layout_mode = 2
-theme_override_styles/slider = SubResource("StyleBoxLine_2h5er")
-theme_override_styles/grabber_area = SubResource("StyleBoxLine_180lp")
+theme_override_colors/font_color = Color(0.752941, 0.858824, 0.941176, 1)
+theme_override_font_sizes/font_size = 24
+text = "Music Volume"
+
+[node name="Music" type="HSlider" parent="MainPanel/MarginContainer/Root/Body/VBoxContainer" unique_id=112497257]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_override_styles/slider = SubResource("StyleBoxLine_slider_bg")
+theme_override_styles/grabber_area = SubResource("StyleBoxLine_slider_fill")
 max_value = 1.0
 step = 0.001
 value = 1.0
 script = ExtResource("2_kvi62")
 bus_name = "Music"
 
-[node name="music_label" type="Label" parent="VBoxContainer/Music" unique_id=1141460399]
-layout_mode = 0
-offset_left = 11.0
-offset_top = -100.0
-offset_right = 821.0
-offset_bottom = -12.0
-theme_override_colors/font_color = Color(0, 0.8666667, 0.59607846, 1)
-theme_override_font_sizes/font_size = 64
-text = "Music Volume"
-
-[node name="Master" type="HSlider" parent="VBoxContainer" unique_id=2003196207]
-custom_minimum_size = Vector2(200, 200)
+[node name="master_label" type="Label" parent="MainPanel/MarginContainer/Root/Body/VBoxContainer" unique_id=474931307]
 layout_mode = 2
-theme_override_styles/slider = SubResource("StyleBoxLine_mrjmh")
-theme_override_styles/grabber_area = SubResource("StyleBoxLine_o5uli")
+theme_override_colors/font_color = Color(0.752941, 0.858824, 0.941176, 1)
+theme_override_font_sizes/font_size = 24
+text = "Master Volume"
+
+[node name="Master" type="HSlider" parent="MainPanel/MarginContainer/Root/Body/VBoxContainer" unique_id=2003196207]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_override_styles/slider = SubResource("StyleBoxLine_slider_bg")
+theme_override_styles/grabber_area = SubResource("StyleBoxLine_slider_fill")
 max_value = 1.0
 step = 0.001
 value = 1.0
 script = ExtResource("2_kvi62")
 bus_name = "Master"
 
-[node name="master_label" type="Label" parent="VBoxContainer/Master" unique_id=474931307]
-layout_mode = 0
-offset_left = 6.0
-offset_top = -99.0
-offset_right = 570.0
-offset_bottom = -11.0
-theme_override_colors/font_color = Color(0, 0.8666667, 0.59607846, 1)
-theme_override_font_sizes/font_size = 64
-text = "Master Volume"
+[node name="ControlsPanel" type="PanelContainer" parent="MainPanel/MarginContainer/Root/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_button_pressed")
 
-[node name="Label" type="Label" parent="." unique_id=1780659649]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -286.0
-offset_top = -3.0
-offset_right = 203.0
-offset_bottom = 172.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(0.54199463, 0.94111013, 0.5822911, 1)
-theme_override_font_sizes/font_size = 128
-text = "Paused
-"
-
-[node name="Back_button" type="Button" parent="." unique_id=1563749143]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 70.0
-offset_top = -174.0
-offset_right = 390.0
-offset_bottom = 1.0
-grow_vertical = 0
-size_flags_vertical = 3
-theme_override_colors/font_color = Color(4.813075e-07, 0.9457925, 0.47263193, 1)
-theme_override_font_sizes/font_size = 64
-theme_override_styles/normal = SubResource("StyleBoxFlat_htppm")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_htppm")
-theme_override_styles/hover = SubResource("StyleBoxFlat_htppm")
-text = "Back"
-
-[node name="Quit_button" type="Button" parent="." unique_id=1479361982]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -441.0
-offset_top = -174.0
-offset_right = -121.0
-offset_bottom = 1.0
-grow_horizontal = 0
-grow_vertical = 0
-size_flags_vertical = 3
-theme_override_colors/font_color = Color(0, 0.94509804, 0.4745098, 1)
-theme_override_font_sizes/font_size = 64
-theme_override_styles/normal = SubResource("StyleBoxFlat_htppm")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_htppm")
-theme_override_styles/hover = SubResource("StyleBoxFlat_htppm")
-text = "Quit
-
-"
-
-[node name="BackToMenu_button" type="Button" parent="." unique_id=54755748]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -286.0
-offset_top = -174.0
-offset_right = 286.0
-offset_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 0
-size_flags_vertical = 3
-theme_override_colors/font_color = Color(0, 0.94509804, 0.4745098, 1)
-theme_override_font_sizes/font_size = 64
-theme_override_styles/normal = SubResource("StyleBoxFlat_htppm")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_htppm")
-theme_override_styles/hover = SubResource("StyleBoxFlat_htppm")
-text = "Back To Menu
-
-"
-
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=131627059]
-offset_right = 1008.0
-offset_bottom = 795.0
-
-[node name="GridContainer" type="GridContainer" parent="MarginContainer" unique_id=94905299]
+[node name="ControlsMargin" type="MarginContainer" parent="MainPanel/MarginContainer/Root/Body/ControlsPanel"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/GridContainer" unique_id=422491118]
+[node name="Controls" type="VBoxContainer" parent="MainPanel/MarginContainer/Root/Body/ControlsPanel/ControlsMargin"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8870081, 0.8780749, 0.885679, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 48
-text = "3d-controlls: 
-  w-up
-  a-left
-  s-backwards 
- d-right"
+theme_override_constants/separation = 10
 
-[node name="Label2" type="Label" parent="MarginContainer/GridContainer" unique_id=979705882]
+[node name="ControlsTitle" type="Label" parent="MainPanel/MarginContainer/Root/Body/ControlsPanel/ControlsMargin/Controls"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8862745, 0.8784314, 0.8862745, 1)
-theme_override_font_sizes/font_size = 48
-text = "2d-controlls: mining-LMB
- 	a-left, d-right
-	Space - jump
- 	E - layer_forward
- 	Q - layer_backward
-	Hold Ctrl - preview_layer"
+theme_override_colors/font_color = Color(0.803922, 0.901961, 0.980392, 1)
+theme_override_font_sizes/font_size = 34
+text = "Controls"
 
-[node name="Label3" type="Label" parent="." unique_id=685479804]
-offset_left = 610.0
-offset_top = 194.0
-offset_right = 1281.0
-offset_bottom = 496.0
-theme_override_colors/font_color = Color(0.8862745, 0.8784314, 0.8862745, 1)
-theme_override_font_sizes/font_size = 42
-text = "Other:
-T-talk
-E-open_shop
-Esc-pause
-L-Exit mine"
+[node name="ControlsText" type="RichTextLabel" parent="MainPanel/MarginContainer/Root/Body/ControlsPanel/ControlsMargin/Controls"]
+custom_minimum_size = Vector2(0, 330)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+theme_override_colors/default_color = Color(0.847059, 0.913725, 0.968627, 0.96)
+theme_override_font_sizes/normal_font_size = 22
+text = "[b]3D[/b]: W/A/S/D move\n[b]2D[/b]: A/D move, Space jump\n[b]Mining[/b]: LMB\n[b]Layers[/b]: E forward, Q backward, Ctrl preview\n[b]Interaction[/b]: T talk, E open shop\n[b]System[/b]: Esc pause, L exit mine"
 
-[connection signal="value_changed" from="VBoxContainer/SFX" to="VBoxContainer/SFX" method="_on_value_changed"]
-[connection signal="value_changed" from="VBoxContainer/Music" to="VBoxContainer/Music" method="_on_value_changed"]
-[connection signal="value_changed" from="VBoxContainer/Master" to="VBoxContainer/Master" method="_on_value_changed"]
-[connection signal="pressed" from="Back_button" to="." method="_on_back_button_pressed"]
-[connection signal="pressed" from="Quit_button" to="." method="_on_quit_button_pressed"]
-[connection signal="pressed" from="BackToMenu_button" to="." method="_on_back_to_menu_button_pressed"]
+[node name="Footer" type="HBoxContainer" parent="MainPanel/MarginContainer/Root"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Back_button" type="Button" parent="MainPanel/MarginContainer/Root/Footer" unique_id=1563749143]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.913725, 0.964706, 1, 1)
+theme_override_colors/font_hover_color = Color(0.956863, 0.984314, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.807843, 0.901961, 0.968627, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "Resume"
+
+[node name="BackToMenu_button" type="Button" parent="MainPanel/MarginContainer/Root/Footer" unique_id=54755748]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.913725, 0.964706, 1, 1)
+theme_override_colors/font_hover_color = Color(0.956863, 0.984314, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.807843, 0.901961, 0.968627, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "Main Menu"
+
+[node name="Quit_button" type="Button" parent="MainPanel/MarginContainer/Root/Footer" unique_id=1479361982]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.890196, 0.890196, 1)
+theme_override_colors/font_hover_color = Color(1, 0.94902, 0.94902, 1)
+theme_override_colors/font_pressed_color = Color(0.956863, 0.831373, 0.831373, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "Quit"
+
+[connection signal="value_changed" from="MainPanel/MarginContainer/Root/Body/VBoxContainer/SFX" to="MainPanel/MarginContainer/Root/Body/VBoxContainer/SFX" method="_on_value_changed"]
+[connection signal="value_changed" from="MainPanel/MarginContainer/Root/Body/VBoxContainer/Music" to="MainPanel/MarginContainer/Root/Body/VBoxContainer/Music" method="_on_value_changed"]
+[connection signal="value_changed" from="MainPanel/MarginContainer/Root/Body/VBoxContainer/Master" to="MainPanel/MarginContainer/Root/Body/VBoxContainer/Master" method="_on_value_changed"]
+[connection signal="pressed" from="MainPanel/MarginContainer/Root/Footer/Back_button" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="MainPanel/MarginContainer/Root/Footer/Quit_button" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="MainPanel/MarginContainer/Root/Footer/BackToMenu_button" to="." method="_on_back_to_menu_button_pressed"]

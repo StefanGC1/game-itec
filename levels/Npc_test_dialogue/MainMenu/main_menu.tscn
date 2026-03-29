@@ -3,95 +3,176 @@
 [ext_resource type="Script" uid="uid://bm3txl38bg6h6" path="res://levels/Npc_test_dialogue/MainMenu/main_menu.gd" id="1_4ioha"]
 [ext_resource type="Texture2D" uid="uid://bkxa6yb0nr2br" path="res://levels/Npc_test_dialogue/MainMenu/bridge.png" id="2_hbbyp"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4ioha"]
-texture = ExtResource("2_hbbyp")
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+content_margin_left = 36.0
+content_margin_top = 36.0
+content_margin_right = 36.0
+content_margin_bottom = 36.0
+bg_color = Color(0.0509804, 0.0862745, 0.129412, 0.88)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.376471, 0.658824, 0.870588, 0.5)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 18
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d3mr6"]
-bg_color = Color(0.82889193, 0.4950636, 0.44916785, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_normal"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.121569, 0.211765, 0.298039, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.380392, 0.658824, 0.870588, 0.6)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_hover"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.168627, 0.278431, 0.388235, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.533333, 0.815686, 0.964706, 0.85)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_pressed"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.0941176, 0.156863, 0.231373, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.309804, 0.560784, 0.764706, 0.9)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
 
 [node name="MainMenu" type="CanvasLayer" unique_id=1142662446]
 layer = 500
 script = ExtResource("1_4ioha")
 
-[node name="Panel" type="Panel" parent="." unique_id=1137592084]
+[node name="Background" type="TextureRect" parent="." unique_id=1137592084]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_4ioha")
+texture = ExtResource("2_hbbyp")
+expand_mode = 1
+stretch_mode = 6
+modulate = Color(0.68, 0.78, 0.9, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1866416783]
+[node name="Scrim" type="ColorRect" parent="." unique_id=1936416783]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.02, 0.03, 0.05, 0.58)
+
+[node name="MainCard" type="PanelContainer" parent="." unique_id=1866416783]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -325.5
-offset_top = -279.0
-offset_right = 325.5
-offset_bottom = 385.0
+offset_left = -370.0
+offset_top = -300.0
+offset_right = 370.0
+offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 30
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
 
-[node name="StartGame_Button" type="Button" parent="VBoxContainer" unique_id=1519211768]
+[node name="MarginContainer" type="MarginContainer" parent="MainCard"]
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_colors/font_color = Color(0, 0.94509804, 0.4745098, 1)
-theme_override_colors/font_pressed_color = Color(2.5509298e-06, 0.6237975, 0.30439454, 1)
-theme_override_colors/font_hover_color = Color(3.7541986e-06, 0.8111245, 0.40357628, 1)
-theme_override_font_sizes/font_size = 64
-theme_override_styles/normal = SubResource("StyleBoxFlat_d3mr6")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_d3mr6")
-theme_override_styles/hover = SubResource("StyleBoxFlat_d3mr6")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainCard/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Label" type="Label" parent="MainCard/MarginContainer/VBoxContainer" unique_id=1122210242]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.890196, 0.94902, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.45)
+theme_override_font_sizes/font_size = 74
+text = "Butterfly Grove"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="MainCard/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.721569, 0.839216, 0.937255, 0.95)
+theme_override_font_sizes/font_size = 24
+text = "A calm world with hidden depths"
+horizontal_alignment = 1
+
+[node name="SpaceTop" type="Control" parent="MainCard/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="StartGame_Button" type="Button" parent="MainCard/MarginContainer/VBoxContainer" unique_id=1519211768]
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.913725, 0.964706, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.807843, 0.901961, 0.968627, 1)
+theme_override_colors/font_hover_color = Color(0.956863, 0.984314, 1, 1)
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
 text = "Play"
 
-[node name="OptionsGame_Button" type="Button" parent="VBoxContainer" unique_id=462094572]
+[node name="OptionsGame_Button" type="Button" parent="MainCard/MarginContainer/VBoxContainer" unique_id=462094572]
+custom_minimum_size = Vector2(0, 84)
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_colors/font_color = Color(0, 0.94509804, 0.4745098, 1)
-theme_override_colors/font_pressed_color = Color(0, 0.62352943, 0.30588236, 1)
-theme_override_colors/font_hover_color = Color(0, 0.8117647, 0.40392157, 1)
-theme_override_font_sizes/font_size = 64
-theme_override_styles/normal = SubResource("StyleBoxFlat_d3mr6")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_d3mr6")
-theme_override_styles/hover = SubResource("StyleBoxFlat_d3mr6")
+theme_override_colors/font_color = Color(0.913725, 0.964706, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.807843, 0.901961, 0.968627, 1)
+theme_override_colors/font_hover_color = Color(0.956863, 0.984314, 1, 1)
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
 text = "Options"
 
-[node name="QuitGame_Button" type="Button" parent="VBoxContainer" unique_id=1386147378]
+[node name="QuitGame_Button" type="Button" parent="MainCard/MarginContainer/VBoxContainer" unique_id=1386147378]
+custom_minimum_size = Vector2(0, 84)
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_colors/font_color = Color(0, 0.94509804, 0.4745098, 1)
-theme_override_colors/font_pressed_color = Color(0, 0.62352943, 0.30588236, 1)
-theme_override_colors/font_hover_color = Color(0, 0.8117647, 0.40392157, 1)
-theme_override_font_sizes/font_size = 64
-theme_override_styles/normal = SubResource("StyleBoxFlat_d3mr6")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_d3mr6")
-theme_override_styles/hover = SubResource("StyleBoxFlat_d3mr6")
-text = "Quit
-"
+theme_override_colors/font_color = Color(0.913725, 0.964706, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.807843, 0.901961, 0.968627, 1)
+theme_override_colors/font_hover_color = Color(0.956863, 0.984314, 1, 1)
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "Quit"
 
-[node name="Label" type="Label" parent="." unique_id=1122210242]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -289.0
-offset_top = 33.0
-offset_right = 258.0
-offset_bottom = 187.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 0.72156864, 1, 1)
-theme_override_colors/font_shadow_color = Color(0.24126896, 0.13923031, 0.11010169, 0)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_y = 0
-theme_override_font_sizes/font_size = 128
-text = "Butterfly grove"
+[node name="SpaceBottom" type="Control" parent="MainCard/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
 
-[connection signal="pressed" from="VBoxContainer/StartGame_Button" to="." method="_on_start_game_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/OptionsGame_Button" to="." method="_on_optionst_game_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/QuitGame_Button" to="." method="_on_quit_game_button_pressed"]
+[connection signal="pressed" from="MainCard/MarginContainer/VBoxContainer/StartGame_Button" to="." method="_on_start_game_button_pressed"]
+[connection signal="pressed" from="MainCard/MarginContainer/VBoxContainer/OptionsGame_Button" to="." method="_on_optionst_game_button_pressed"]
+[connection signal="pressed" from="MainCard/MarginContainer/VBoxContainer/QuitGame_Button" to="." method="_on_quit_game_button_pressed"]
