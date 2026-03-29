@@ -27,5 +27,4 @@ Lighthouse Keeper: You're not like the other automatons, you seem more... curiou
 
 ~ interaction_4
 Lighthouse Keeper: You're still here? Go change something.
-- Leave
-    => interaction_4
+=> END

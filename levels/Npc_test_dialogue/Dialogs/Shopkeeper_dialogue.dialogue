@@ -20,5 +20,4 @@ Shopkeeper: Remember, I paid for you.
 Shopkeeper: What?
 MATE: How come you're so obsessed with me mining ore, even though you don't recieve it?
 Shopkeeper: I got my ways to benefit.
-- Leave
-    => interaction_4
+=> END
