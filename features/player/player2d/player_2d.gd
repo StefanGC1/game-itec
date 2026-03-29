@@ -3,6 +3,9 @@ extends CharacterBody2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var mining_box: Area2D = $MiningBox
 @onready var dig_charge_bar: ProgressBar = $Dig_Charge_Up
+@onready var audio_walking_brick = $AudioStreamPlayer_walk
+@onready var audio_jumping = $AudioStreamPlayer_jump
+@onready var audio_landing = $AudioStreamPlayer_land_brick
 
 const FLOOR_EPSILON := 0.01
 
@@ -57,7 +60,7 @@ var landing_lock_active: bool = false
 var was_on_floor: bool = false
 var facing_direction: int = 1
 var _input_locked: bool = false
-
+var  was_in_air:bool = false
 signal switch_layer(direction: int, player_position: Vector2)
 signal preview_layers(isActive: bool)
 signal mine_tile(target_global_position: Vector2)
@@ -89,6 +92,11 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		was_on_floor = is_on_floor()
 		return
+		
+	if get_real_velocity() != Vector2.ZERO and is_on_floor():
+		if not audio_walking_brick.playing:
+			audio_walking_brick.play()
+	else: audio_walking_brick.stop()
 
 	var on_floor_before := is_on_floor()
 	var direction := Input.get_axis("2d_left", "2d_right")
@@ -119,6 +127,12 @@ func _physics_process(delta: float) -> void:
 
 	if mining_active:
 		_try_emit_mine()
+		
+	if not was_in_air and not is_on_floor():
+		was_in_air = true
+	if was_in_air and is_on_floor():
+		was_in_air = false
+		audio_landing.play()
 
 
 func _update_coyote_window(on_floor_previous_frame: bool, on_floor_after_move: bool) -> void:

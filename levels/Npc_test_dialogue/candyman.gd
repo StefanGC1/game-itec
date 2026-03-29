@@ -40,7 +40,6 @@ func _physics_process(delta: float) -> void:
 	if is_in_dialogue:
 		return
 	if Input.is_action_just_pressed("2d_jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
 		player_jumping_audio_stream.play()
 
 	var direction := Input.get_axis("2d_left", "2d_right")

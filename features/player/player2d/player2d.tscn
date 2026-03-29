@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://rcxcvtud0uud" path="res://features/player/player2d/player_2d.gd" id="1_sacy7"]
 [ext_resource type="Texture2D" uid="uid://jbgxxbloujtx" path="res://assets/Spritesheets/miningguy.png" id="2_hxpdd"]
+[ext_resource type="AudioStream" uid="uid://c5kfb4gjajggr" path="res://levels/Npc_test_dialogue/Sounds/Footstep_concrete_insta.mp3" id="3_16rtq"]
+[ext_resource type="AudioStream" uid="uid://c2ii4koh38rrq" path="res://levels/Npc_test_dialogue/Sounds/0_1__Cartoon Jump Sound Effect.mp3" id="4_d3pm8"]
+[ext_resource type="AudioStream" uid="uid://ct5cfh1nvwefj" path="res://levels/Npc_test_dialogue/Sounds/Landinig_brick_sound.mp3" id="5_be2mw"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hxpdd"]
 radius = 15.0
@@ -146,20 +149,6 @@ bg_color = Color(0.79618526, 0.4054474, 0.18034497, 1)
 
 [node name="Player2D" type="CharacterBody2D" unique_id=204201863]
 script = ExtResource("1_sacy7")
-max_speed = null
-ground_accel = null
-ground_decel = null
-air_accel = null
-air_decel = null
-jump_velocity = null
-rise_gravity = null
-fall_gravity = null
-jump_cut_multiplier = null
-coyote_time = null
-jump_buffer_time = null
-landing_state_duration = null
-layer_switch_cooldown_seconds = null
-mine_charge_time = null
 
 [node name="EnvCollision" type="CollisionShape2D" parent="." unique_id=2066574137]
 position = Vector2(0, 1)
@@ -205,3 +194,13 @@ offset_bottom = -48.0
 theme_override_styles/background = SubResource("StyleBoxFlat_hxpdd")
 theme_override_styles/fill = SubResource("StyleBoxFlat_4xh3n")
 show_percentage = false
+
+[node name="AudioStreamPlayer_walk" type="AudioStreamPlayer2D" parent="." unique_id=1492606434]
+stream = ExtResource("3_16rtq")
+pitch_scale = 2.0
+
+[node name="AudioStreamPlayer_jump" type="AudioStreamPlayer2D" parent="." unique_id=296226920]
+stream = ExtResource("4_d3pm8")
+
+[node name="AudioStreamPlayer_land_brick" type="AudioStreamPlayer2D" parent="." unique_id=1025694446]
+stream = ExtResource("5_be2mw")
