@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://bpmj14aficryf" path="res://features/z_layer_manager/z_layer_manager.tscn" id="3_xde8t"]
 [ext_resource type="Script" uid="uid://c8wjq23hanmux" path="res://features/cave/cave_generator/cave_ore_entry.gd" id="5_ppwmx"]
 [ext_resource type="PackedScene" uid="uid://bsm7dfpcs6d3p" path="res://features/NPCs/DialogueSign.tscn" id="8_gwdoe"]
+[ext_resource type="AudioStream" uid="uid://dxr0vv0ynguyd" path="res://levels/Npc_test_dialogue/Sounds/Background_music_mp3.mp3" id="10_0ymbk"]
+[ext_resource type="PackedScene" uid="uid://bcr61dr24n4t3" path="res://levels/Npc_test_dialogue/MainMenu/pause_menu.tscn" id="11_ws1i5"]
 
 [sub_resource type="Resource" id="Resource_1680j"]
 script = ExtResource("3_mb7q1")
@@ -123,3 +125,11 @@ preview_previous_tint = Color(0, 0.67058825, 0.13725491, 1)
 [node name="DialogueSign" parent="." unique_id=1950380412 instance=ExtResource("8_gwdoe")]
 position = Vector2(58.000004, 487)
 scale = Vector2(1.7306483, 1.8381741)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer" parent="." unique_id=1704605098]
+stream = ExtResource("10_0ymbk")
+volume_db = 6.0
+autoplay = true
+bus = &"Music"
+
+[node name="PauseMenu" parent="." unique_id=1669636307 instance=ExtResource("11_ws1i5")]

@@ -13,6 +13,9 @@
 [ext_resource type="PackedScene" uid="uid://dol7lt3rjun44" path="res://features/NPCs/Shopkeeper.tscn" id="11_shopkeeper"]
 [ext_resource type="PackedScene" uid="uid://b2u34r2niwvfb" path="res://features/NPCs/LighthouseKeeper.tscn" id="12_lighthouse"]
 [ext_resource type="Shape3D" uid="uid://dn0fji5jfv0wk" path="res://levels/World_Village/Village_CollisionData/Village_InvisibleBorderLayer_collision.res" id="14_border"]
+[ext_resource type="PackedScene" uid="uid://bcr61dr24n4t3" path="res://levels/Npc_test_dialogue/MainMenu/pause_menu.tscn" id="13_pgkh2"]
+[ext_resource type="AudioStream" uid="uid://dfba6l6yukf11" path="res://levels/Npc_test_dialogue/Sounds/0_22__Butterfly Wings Sound Effect.mp3" id="14_rwykm"]
+[ext_resource type="AudioStream" uid="uid://bdn6636rr35gy" path="res://levels/Npc_test_dialogue/Sounds/Burd_sounds.mp3" id="15_rwykm"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_f7ft4"]
 load_path = "res://.godot/imported/TX Tileset Grass.png-7f136b84b805f23f59ef731a47d705b5.s3tc.ctex"
@@ -579,6 +582,20 @@ script = ExtResource("4_jhrf8")
 
 [node name="@CollisionShape3D@44182" type="CollisionShape3D" parent="InvisibleBorderLayer/@StaticBody3D@44183" unique_id=126626431]
 shape = ExtResource("14_border")
+
+[node name="PauseMenu" parent="." unique_id=1669636307 instance=ExtResource("13_pgkh2")]
+
+[node name="AudioStream_butterfly" type="AudioStreamPlayer" parent="." unique_id=179863377]
+stream = ExtResource("14_rwykm")
+volume_db = -3.0
+autoplay = true
+bus = &"SFX"
+
+[node name="AudioStream_birds" type="AudioStreamPlayer" parent="." unique_id=1801155277]
+stream = ExtResource("15_rwykm")
+volume_db = -5.0
+autoplay = true
+bus = &"SFX"
 
 [node name="CaveEntrance" type="Sprite3D" parent="." unique_id=1554572203]
 transform = Transform3D(2.3729653, 0, 0, 0, 2.3729653, 0, 0, 0, 1, 21.70869, 1.2097309, -2.0592384)
