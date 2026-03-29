@@ -5,10 +5,10 @@ const SPEED = 5.0
 const DRILL_MAX_LEVEL := 3
 const STAT_MAX_LEVEL := 10
 
-const DRILL_UPGRADE_COSTS: Array[int] = [0, 100, 250]
-const MINING_SPEED_UPGRADE_COSTS: Array[int] = [0, 30, 45, 60, 80, 100, 130, 160, 200, 240]
-const FUEL_UPGRADE_COSTS: Array[int] = [0, 25, 35, 50, 70, 90, 120, 150, 185, 220]
-const INVENTORY_UPGRADE_COSTS: Array[int] = [0, 20, 30, 45, 60, 80, 105, 130, 160, 195]
+const DRILL_UPGRADE_COSTS: Array[int] = [0, 1750, 10000]
+const MINING_SPEED_UPGRADE_COSTS: Array[int] = [0, 150, 350, 550, 750, 900, 1050, 1200, 1350, 1500]
+const FUEL_UPGRADE_COSTS: Array[int] = [0, 150, 350, 550, 750, 900, 1050, 1200, 1350, 1500]
+const INVENTORY_UPGRADE_COSTS: Array[int] = [0, 150, 350, 550, 750, 900, 1050, 1200, 1350, 1500]
 
 const ACTION_LEFT := "3d_left"
 const ACTION_RIGHT := "3d_right"
@@ -17,7 +17,7 @@ const ACTION_BACKWARD := "3d_backward"
 const ANIM_IDLE := "Idle"
 const ANIM_WALKING := "Walking"
 
-@export var credits := 300
+@export var credits := 25
 
 @export_range(1, DRILL_MAX_LEVEL) var drill_level := 1
 

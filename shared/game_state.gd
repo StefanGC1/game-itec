@@ -20,7 +20,7 @@ signal credits_changed(new_credits: int)
 signal trade_completed(village_id: String, item_id: String, quantity: int, is_buy: bool, credits_delta: int)
 
 var location := "village"
-var credits := 300
+var credits := 25
 var global_inflation_index := 0.0
 
 var player_progress: Dictionary = {
@@ -30,15 +30,20 @@ var player_progress: Dictionary = {
 	"inventory_capacity_level": 1
 }
 
+func get_inventory_capacity() -> int:
+	return 30 * player_progress.get("inventory_capacity_level", 1)
+
 var inventory := {
-	"wood": 20,
-	"herbs": 8,
+	"wood": 2,
+	"herbs": 1,
 	"coal": 0,
 	"iron": 0,
 	"gold": 0,
 	"diamond": 0,
 	"adamantite": 0
 }
+
+var item_count: int = 0
 
 var village_prices := {
 	"Village1": {
@@ -130,6 +135,9 @@ var recent_sell_history: Array[String] = []
 func _ready() -> void:
 	_ensure_market_state_initialized()
 
+	for item_id in inventory.keys():
+		item_count += int(inventory[item_id])
+
 
 func set_location(new_location: String) -> void:
 	location = new_location
@@ -193,8 +201,11 @@ func apply_inflation_to_upgrade_cost(base_cost: int) -> int:
 func add_inventory_item(item_id: String, quantity: int) -> Dictionary:
 	if quantity <= 0:
 		return {"success": false, "message": "Quantity must be greater than zero."}
+	if item_count + quantity > get_inventory_capacity():
+		return {"success": false, "message": "Cannot add items. Inventory capacity exceeded."}
 
 	inventory[item_id] = get_inventory_amount(item_id) + quantity
+	item_count += quantity
 	inventory_changed.emit(item_id, int(inventory[item_id]))
 	return {
 		"success": true,
