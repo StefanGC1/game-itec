@@ -4,7 +4,7 @@ const HOME_VILLAGE_ID := "HomeVillage"
 const TRADE_ITEMS: Array[String] = ["wood", "herbs", "coal", "iron", "gold", "diamond", "adamantite"]
 const MINEABLE_ORES: Array[String] = ["coal", "iron", "gold", "diamond", "adamantite"]
 
-const PRICE_MIN_MULTIPLIER := 0.55
+const PRICE_MIN_MULTIPLIER := -5
 const PRICE_MAX_MULTIPLIER := 2.20
 const SELL_PRESSURE_PER_UNIT := 0.045
 const BUY_PRESSURE_PER_UNIT := 0.032
@@ -12,14 +12,14 @@ const STREAK_PRESSURE_PER_UNIT := 0.018
 const PASSIVE_DECAY_PER_TRADE := 0.975
 const OTHER_ITEM_DECAY_PER_TRADE := 0.94
 const RECENT_SELL_HISTORY_LIMIT := 24
-const MAX_GLOBAL_INFLATION := 0.75
+const MAX_GLOBAL_INFLATION := 5
 const UPGRADE_INFLATION_WEIGHT := 0.90
 
 signal inventory_changed(item_id: String, new_amount: int)
 signal credits_changed(new_credits: int)
 signal trade_completed(village_id: String, item_id: String, quantity: int, is_buy: bool, credits_delta: int)
 
-var credits := 25:
+var credits := 5000:
 	set(value):
 		if credits != value:
 			credits = value
@@ -222,7 +222,8 @@ func add_inventory_item(item_id: String, quantity: int) -> Dictionary:
 
 	if item_id == "adamantite" and int(inventory["adamantite"]) >= 50:
 		GameMaster.go_to(GameMaster.Location.END_CUTSCENE)
-
+	
+	print(inventory)
 	return {
 		"success": true,
 		"message": "Added " + str(actual_quantity) + " " + item_id + " to inventory.",
@@ -321,6 +322,10 @@ func buy_item(village_id: String, item_id: String, quantity: int) -> Dictionary:
 	var total_cost: int = price * quantity
 	if credits < total_cost:
 		return {"success": false, "message": "Not enough credits. Need " + str(total_cost) + "."}
+	
+	# TODO: Fill until capacity
+	if (item_count + quantity) > get_inventory_capacity():
+		return {"succes": false, "message": "Not enough capity"}
 
 	credits -= total_cost
 	credits_changed.emit(credits)
@@ -351,6 +356,7 @@ func sell_item(village_id: String, item_id: String, quantity: int) -> Dictionary
 	var total_revenue: int = price * quantity
 	inventory[item_id] = current_amount - quantity
 	credits += total_revenue
+	item_count -= quantity
 	credits_changed.emit(credits)
 	inventory_changed.emit(item_id, int(inventory[item_id]))
 	_register_trade_pressure(item_id, quantity, false)

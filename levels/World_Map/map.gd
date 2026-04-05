@@ -101,6 +101,7 @@ func _on_remote_village_pressed(village_name: String) -> void:
 		status_label.text = "GameState autoload is missing. Add it in project settings."
 		return
 
+	# TODO: Change get_node to proper GameState object
 	var game_state := get_node("/root/GameState")
 	var snapshot := game_state.call("get_trade_snapshot", village_name) as Dictionary
 	_set_map_buttons_enabled(false)
